@@ -1,0 +1,308 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Routes, Route, NavLink, useNavigate } from 'react-router-dom';
+import AdminStaffPage from './AdminStaffPage';
+import AdminUserPage from './AdminUserPage';
+import AdminFeedbackPage from './AdminFeedbackPage';
+import LoginPage from '../../LoginPage';
+
+import { FaHome, FaUsers, FaUserTie, FaBox, FaSitemap, FaStar, FaServer, FaBicycle, FaFile, FaSearch } from 'react-icons/fa';
+import { FaSuitcase } from 'react-icons/fa6';
+
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from 'chart.js';
+import { Pie, Bar } from 'react-chartjs-2';
+
+ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
+
+const Sidebar = () => {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login', { replace: true });
+  };
+
+  return (
+    <div className="sidebar min-h-screen w-64 bg-black/90 border-r border-fuchsia-600 shadow-[0_0_20px_rgba(255,0,255,0.7)] text-white flex flex-col justify-between">
+      <div>
+        <div className="logo flex items-center gap-2 px-6 py-4 text-fuchsia-400 text-lg font-bold drop-shadow-[0_0_10px_#f0f]">
+          <FaUserTie />
+          Admin Dashboard
+        </div>
+        <nav>
+          <ul className="space-y-2 px-4">
+            <li className="nav-item">
+              <NavLink to="/admindashboard" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-fuchsia-600/20 hover:text-fuchsia-400 transition">
+                <FaHome className="nav-icon" />
+                Dashboard
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to="/admindashboard/users" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-fuchsia-600/20 hover:text-fuchsia-400 transition">
+                <FaUsers className="nav-icon" />
+                Users
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to="/admindashboard/staff" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-fuchsia-600/20 hover:text-fuchsia-400 transition">
+                <FaSuitcase className="nav-icon" />
+                Staff Members
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to="/admindashboard/products" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-fuchsia-600/20 hover:text-fuchsia-400 transition">
+                <FaSitemap className="nav-icon" />
+                Products
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to="/admindashboard/inventory" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-fuchsia-600/20 hover:text-fuchsia-400 transition">
+                <FaBox className="nav-icon" />
+                Inventory
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to="/admindashboard/feedback" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-fuchsia-600/20 hover:text-fuchsia-400 transition">
+                <FaStar className="nav-icon" />
+                Feedback & Rating system
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to="/admindashboard/services" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-fuchsia-600/20 hover:text-fuchsia-400 transition">
+                <FaServer className="nav-icon" />
+                Services
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to="/admindashboard/orders" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-fuchsia-600/20 hover:text-fuchsia-400 transition">
+                <FaBicycle className="nav-icon" />
+                Orders
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to="/admindashboard/payments" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-fuchsia-600/20 hover:text-fuchsia-400 transition">
+                <FaFile className="nav-icon" />
+                Payments
+              </NavLink>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div className="user-info px-6 py-4 border-t border-fuchsia-600">
+        <span className="block text-sm text-cyan-300">Admin User</span>
+        <button
+          onClick={handleLogout}
+          className="mt-2 w-full rounded-lg bg-gradient-to-r from-fuchsia-600 to-cyan-500 px-3 py-2 text-sm font-bold text-white shadow-[0_0_10px_rgba(0,255,255,0.6)] hover:scale-105 transition-transform"
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const DashboardContent = () => {
+  const [userChartData, setUserChartData] = useState({
+    labels: ['Logged-In Users', 'Newly Created Users'],
+    datasets: [{ data: [0, 0], backgroundColor: ['#28a745', '#007bff'] }],
+  });
+  const [totalUsers, setTotalUsers] = useState(0);
+
+  const fetchUserCounts = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:5001/api/user', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const allUsers = response.data.users;
+      const loggedInCount = allUsers.filter(user => user.lastLogin).length;
+      const newlyCreatedCount = allUsers.filter(user => !user.lastLogin).length;
+      setTotalUsers(allUsers.length);
+      setUserChartData({
+        labels: ['Logged-In Users', 'Newly Created Users'],
+        datasets: [
+          {
+            label: 'Number of Users',
+            data: [loggedInCount, newlyCreatedCount],
+            backgroundColor: ['#28a745', '#007bff'],
+            borderColor: ['#218838', '#0069d9'],
+            borderWidth: 1,
+          },
+        ],
+      });
+    } catch (error) {
+      console.error("Failed to fetch user data for dashboard:", error);
+    }
+  };
+
+  const [staffChartData, setStaffChartData] = useState({
+    labels: ['Logged-In Staff', 'Newly Created Staff'],
+    datasets: [{ data: [0, 0], backgroundColor: ['#17a2b8', '#dc3545'] }],
+  });
+  const [totalStaff, setTotalStaff] = useState(0);
+
+  const fetchStaffCounts = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:5001/api/staff', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const allStaff = response.data.staffMembers;
+      const loggedInCount = allStaff.filter(staff => staff.lastLogin).length;
+      const newlyCreatedCount = allStaff.filter(staff => !staff.lastLogin).length;
+      setTotalStaff(allStaff.length);
+      setStaffChartData({
+        labels: ['Logged-In Staff', 'Newly Created Staff'],
+        datasets: [
+          {
+            label: 'Number of Staff',
+            data: [loggedInCount, newlyCreatedCount],
+            backgroundColor: ['#17a2b8', '#dc3545'],
+            borderColor: ['#138496', '#c82333'],
+            borderWidth: 1,
+          },
+        ],
+      });
+    } catch (error) {
+      console.error("Failed to fetch staff data for dashboard:", error);
+    }
+  };
+
+  const [feedbackChartData, setFeedbackChartData] = useState({
+    labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
+    datasets: [{
+      label: 'Number of Feedbacks',
+      data: [0, 0, 0, 0, 0],
+      backgroundColor: ['#e44a05', '#f19e42', '#f0e66c', '#add8e6', '#28a745'],
+      borderColor: ['#c33d04', '#d48a31', '#d4cd5d', '#99c2d1', '#218838'],
+      borderWidth: 1,
+    }],
+  });
+  const [totalFeedbacks, setTotalFeedbacks] = useState(0);
+
+  const fetchFeedbackCounts = async () => {
+    try {
+      const response = await axios.get('http://localhost:5001/api/feedback');
+      const feedbacks = response.data || [];
+      const dist = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+      feedbacks.forEach(f => {
+        const rating = f.serviceRating;
+        if (dist.hasOwnProperty(rating)) {
+          dist[rating]++;
+        }
+      });
+      setTotalFeedbacks(feedbacks.length);
+      setFeedbackChartData({
+        labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
+        datasets: [
+          {
+            label: 'Number of Feedbacks',
+            data: [dist[1], dist[2], dist[3], dist[4], dist[5]],
+            backgroundColor: ['#e44a05', '#f19e42', '#f0e66c', '#add8e6', '#28a745'],
+            borderColor: ['#c33d04', '#d48a31', '#d4cd5d', '#99c2d1', '#218838'],
+            borderWidth: 1,
+          },
+        ],
+      });
+    } catch (error) {
+      console.error("Failed to fetch feedback data for dashboard:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserCounts();
+    fetchStaffCounts();
+    fetchFeedbackCounts();
+  }, []);
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: {
+        callbacks: {
+          label: function (tooltipItem) {
+            return `${tooltipItem.label}: ${tooltipItem.raw}`;
+          }
+        }
+      }
+    },
+    scales: { y: { beginAtZero: true } },
+  };
+
+  return (
+    <div className="main-content flex-1 bg-gradient-to-br from-black via-gray-900 to-black text-white min-h-screen p-6">
+      <header className="dashboard-header flex justify-between items-center border-b border-fuchsia-600 pb-4 mb-6">
+        <h1 className="text-2xl font-bold text-fuchsia-400 drop-shadow-[0_0_10px_#f0f]">Dashboard Overview</h1>
+        <div className="header-right flex items-center gap-3">
+          <input type="text" placeholder="Search..." className="rounded-lg bg-gray-900 border border-cyan-400 px-3 py-1 text-sm text-white focus:ring-2 focus:ring-fuchsia-500 shadow-[0_0_8px_rgba(0,255,255,0.5)]" />
+          <div className="profile-icon h-8 w-8 rounded-full bg-gradient-to-r from-fuchsia-600 to-cyan-500 shadow-[0_0_10px_rgba(255,0,255,0.6)]"></div>
+        </div>
+      </header>
+      <div className="widgets-container grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div className="card bg-gray-900/80 border border-cyan-400 rounded-xl p-4 shadow-[0_0_12px_rgba(0,255,255,0.4)]">
+          <h3 className="text-cyan-300 font-semibold">Total Users</h3>
+          <p className="text-2xl font-bold">{totalUsers}</p>
+        </div>
+        <div className="card bg-gray-900/80 border border-cyan-400 rounded-xl p-4 shadow-[0_0_12px_rgba(0,255,255,0.4)]">
+          <h3 className="text-cyan-300 font-semibold">Total Staff</h3>
+          <p className="text-2xl font-bold">{totalStaff}</p>
+        </div>
+        <div className="card bg-gray-900/80 border border-cyan-400 rounded-xl p-4 shadow-[0_0_12px_rgba(0,255,255,0.4)]">
+          <h3 className="text-cyan-300 font-semibold">Total Feedbacks</h3>
+          <p className="text-2xl font-bold">{totalFeedbacks}</p>
+        </div>
+      </div>
+      <div className="widgets-container grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div className="card bg-gray-900/80 border border-fuchsia-600 rounded-xl p-4 shadow-[0_0_12px_rgba(255,0,255,0.5)]">
+          <h3 className="text-fuchsia-400 font-semibold mb-2">User Accounts Overview</h3>
+          <div className="chart-container">
+            <Pie data={userChartData} options={options} />
+          </div>
+        </div>
+        <div className="card bg-gray-900/80 border border-fuchsia-600 rounded-xl p-4 shadow-[0_0_12px_rgba(255,0,255,0.5)]">
+          <h3 className="text-fuchsia-400 font-semibold mb-2">Staff Accounts Overview</h3>
+          <div className="chart-container">
+            <Pie data={staffChartData} options={options} />
+          </div>
+        </div>
+      </div>
+      <div className="widgets-container">
+        <div className="card full-width-card bg-gray-900/80 border border-fuchsia-600 rounded-xl p-4 shadow-[0_0_12px_rgba(255,0,255,0.5)]">
+          <h3 className="text-fuchsia-400 font-semibold mb-2">Feedback Rating Distribution</h3>
+          <div className="chart-container">
+            <Bar data={feedbackChartData} options={options} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const AdminDashboard = () => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    return <FaSearch />;
+  }
+
+  return (
+    <div className="app-container flex">
+      <Sidebar />
+      <div className="content-container flex-1">
+        <Routes>
+          <Route path="/" element={<DashboardContent />} />
+          <Route path="/users" element={<AdminUserPage />} />
+          <Route path="/staff" element={<AdminStaffPage />} />
+          <Route path="/products" element={<h1>Products Page</h1>} />
+          <Route path="/inventory" element={<h1>Inventory Page</h1>} />
+          <Route path="/feedback" element={<AdminFeedbackPage />} />
+          <Route path="/services" element={<h1>Services Page</h1>} />
+          <Route path="/orders" element={<h1>Orders Page</h1>} />
+          <Route path="/payments" element={<h1>Payments Page</h1>} />
+          <Route path="/login" element={<LoginPage />} />
+        </Routes>
+      </div>
+    </div>
+  );
+};
+
+export default AdminDashboard;
