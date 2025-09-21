@@ -1,78 +1,130 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { login as loginApi } from "../api/auth";
-import { useAuth } from "../context/AuthContext";
+// Login.jsx
+import React, { useState } from 'react';
+import axios from "axios";
+import toast from 'react-hot-toast';
+import { useNavigate } from "react-router-dom";
 
-export default function LoginPage() {
-  const { login } = useAuth();
+const LoginPage = () => {
+  // State to hold form data
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
   const navigate = useNavigate();
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [loading, setLoading] = useState(false);
 
-  const onChange = (e) =>
-    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+  // Handle changes in form fields
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
 
-  const onSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-      const res = await loginApi(form.email, form.password);
-      login(res.data.token);
-      navigate("/salesdashboard", { replace: true }); // redirect here
-    } catch (err) {
-      alert(err.response?.data?.message || "Login failed");
-    } finally {
-      setLoading(false);
-    }
+    const { email, password } = formData;
+
+    // log in as a user
+    axios.post("http://localhost:5001/api/user/login", { email, password })
+      .then((response) => {
+        toast.success("Login successful");
+        localStorage.setItem("token", response.data.token);
+        const user = response.data.user;
+        if (user.role === "admin") {
+          navigate("/admindashboard");
+        } else {
+          navigate("/");
+        }
+      })
+      .catch(() => {
+        // User login failed, now attempt staff login
+        axios.post("http://localhost:5001/api/staff/login", { email, password })
+          .then((staffResponse) => {
+            toast.success("Login successful");
+            localStorage.setItem("token", staffResponse.data.token);
+
+            const staffMember = staffResponse.data.user;
+            if (staffMember.role === 'inventoryManager') {
+              navigate("/inventoryManager", { state: { email: staffMember.email } });
+            }
+            if (staffMember.role === 'productManager') {
+              navigate("/productManager", { state: { email: staffMember.email } });
+            }
+            if (staffMember.role === 'technician') {
+              navigate("/technician", { state: { email: staffMember.email } });
+            }
+            if (staffMember.role === 'salesManager') {
+              navigate("/salesdashboard", { state: { email: staffMember.email } });
+            }
+          })
+          .catch((staffError) => {
+            toast.error(staffError.response?.data?.message || "Login failed. Invalid email or password.");
+          });
+      });
   };
 
   return (
-    <div className="min-h-screen grid place-items-center bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 px-4">
-      <form
-        onSubmit={onSubmit}
-        className="w-full max-w-sm rounded-2xl border border-cyan-400/30 bg-slate-900/70 p-6 shadow-[0_0_30px_rgba(34,211,238,0.18)]"
-      >
-        <h2 className="text-xl font-semibold text-cyan-300 mb-4">Sign in</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black text-white">
+      <div className="w-full max-w-md p-8 rounded-2xl bg-gray-950/80 border border-fuchsia-500 shadow-[0_0_25px_rgba(255,0,255,0.6)]">
+        <h2 className="text-3xl font-extrabold text-fuchsia-400 text-center drop-shadow-[0_0_10px_#f0f]">
+          Welcome Back!
+        </h2>
+        <p className="mt-2 text-center text-sm text-cyan-300">
+          Login to your account!
+        </p>
 
-        <div className="mb-3">
-          <label className="block text-sm text-slate-400 mb-1">Email</label>
-          <input
-            name="email"
-            type="email"
-            className="w-full rounded-lg bg-slate-800/80 border border-cyan-400/40 px-3 py-2 text-slate-100 focus:outline-none"
-            value={form.email}
-            onChange={onChange}
-            required
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+          {/* Email input */}
+          <div>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email Address"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full rounded-lg bg-gray-900 border border-cyan-400 px-4 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 shadow-[0_0_10px_rgba(0,255,255,0.5)]"
+            />
+          </div>
 
-        <div className="mb-4">
-          <label className="block text-sm text-slate-400 mb-1">Password</label>
-          <input
-            name="password"
-            type="password"
-            className="w-full rounded-lg bg-slate-800/80 border border-cyan-400/40 px-3 py-2 text-slate-100 focus:outline-none"
-            value={form.password}
-            onChange={onChange}
-            required
-          />
-        </div>
+          {/* Password input */}
+          <div>
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full rounded-lg bg-gray-900 border border-cyan-400 px-4 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 shadow-[0_0_10px_rgba(0,255,255,0.5)]"
+            />
+          </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full px-4 py-2 rounded-lg bg-cyan-500/90 text-slate-900 font-semibold hover:bg-cyan-400 transition disabled:opacity-50"
-        >
-          {loading ? "Signing in..." : "Sign in"}
-        </button>
+          {/* Forgot password */}
+          <div className="text-right">
+            <a href="/forget" className="text-xs text-fuchsia-400 hover:underline hover:text-fuchsia-300">
+              Forgot password?
+            </a>
+          </div>
 
-        <div className="text-sm text-center text-slate-300 mt-3">
-          New here?{" "}
-          <Link className="text-fuchsia-300 hover:underline" to="/signup">
-            Create an account
-          </Link>
-        </div>
-      </form>
+          {/* Login button */}
+          <button
+            type="submit"
+            className="w-full rounded-lg bg-gradient-to-r from-fuchsia-600 to-cyan-500 px-4 py-2 text-sm font-bold text-white shadow-[0_0_15px_rgba(0,255,255,0.7)] hover:scale-105 transition-transform"
+          >
+            Login
+          </button>
+        </form>
+
+        {/* Signup link */}
+        <p className="mt-6 text-center text-sm text-gray-400">
+          Don&apos;t have an account?{" "}
+          <a href="/signup" className="text-fuchsia-400 hover:underline hover:text-fuchsia-300">
+            Sign up here
+          </a>
+        </p>
+      </div>
     </div>
   );
-}
+};
+
+export default LoginPage;
