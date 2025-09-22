@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+/* optional helpers */
+:root { color-scheme: dark; }
+html, body, #root { height: 100%; }
