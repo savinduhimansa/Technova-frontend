@@ -1,4 +1,4 @@
-export default function PartCard({ part, selected, onPick }) {
+export default function PartCard({ part, selected, onPick, extra }) {
   const img = Array.isArray(part.images) && part.images[0] ? part.images[0] : "";
   return (
     <button
@@ -20,6 +20,7 @@ export default function PartCard({ part, selected, onPick }) {
           {part.socket ? `Socket: ${part.socket} · ` : ""}
           {"price" in part ? `LKR ${Number(part.price || 0).toLocaleString()}` : ""}
         </div>
+        {extra}
       </div>
       <div className="text-xs text-slate-400">Stock: {part.stock ?? "-"}</div>
     </button>

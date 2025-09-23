@@ -23,18 +23,25 @@ export const getCasesForMotherboard = (motherboardId, gpuLengthMM) =>
   api.get(toUrl(`/api/parts/cases/compatible?motherboardId=${encodeURIComponent(motherboardId)}${gpuLengthMM ? `&gpuLengthMM=${gpuLengthMM}` : ""}`))
      .then(r => r.data); // { motherboard, cases }
 
-// Verify (public)
+// Build verification and persistence
 export const verifyBuild = (payload) =>
   api.post(toUrl(`/api/parts/builds/verify`), payload).then(r => r.data);
 
-// Save draft build (JWT optional if your middleware allows)
 export const createDraftBuild = (payload) =>
-  api.post(toUrl(`/api/parts/builds`), payload).then(r => r.data);
+  api.post(toUrl(`/api/parts/builds`), payload).then(r => r.data); // { ok, buildId, build }
 
-// Read saved build
 export const getBuild = (buildId) =>
   api.get(toUrl(`/api/parts/builds/${encodeURIComponent(buildId)}`)).then(r => r.data);
 
-// Build Requests (public submit)
-export const submitBuildRequest = (payload) =>
-  api.post(toUrl(`/api/build-requests/submit`), payload).then(r => r.data);
+export const submitDraft = (buildId) =>
+  api.post(toUrl(`/api/parts/builds/${encodeURIComponent(buildId)}/submit`)).then(r => r.data);
+
+// Admin endpoints
+export const adminListBuilds = (status) =>
+  api.get(toUrl(`/api/parts/admin/builds${status ? `?status=${encodeURIComponent(status)}` : ""}`)).then(r => r.data);
+
+export const adminUpdateBuild = (buildId, patch) =>
+  api.put(toUrl(`/api/parts/admin/builds/${encodeURIComponent(buildId)}`), patch).then(r => r.data);
+
+export const adminDeleteBuild = (buildId) =>
+  api.delete(toUrl(`/api/parts/admin/builds/${encodeURIComponent(buildId)}`)).then(r => r.data);
