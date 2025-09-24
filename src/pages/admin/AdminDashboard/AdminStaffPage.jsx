@@ -145,7 +145,7 @@ const AdminStaffPage = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       toast.success("Staff member deleted successfully!");
-      fetchStaffMembers(); // Refresh the list of staff members
+      fetchStaffMembers();
     } catch (error) {
       console.error("Failed to delete staff:", error);
       toast.error(error.response?.data?.message || "Failed to delete staff member.");
@@ -153,23 +153,22 @@ const AdminStaffPage = () => {
   };
 
   const deleteStaff = (staffId) => {
-    // Show a custom toast with a confirmation message and action buttons
     toast((t) => (
-      <div className="custom-toast-content bg-gray-950/90 border border-fuchsia-600 text-white rounded-xl p-4 shadow-[0_0_16px_rgba(255,0,255,0.5)]">
-        <p className="text-sm text-cyan-200">Are you sure you want to delete this staff member? This action cannot be undone.</p>
+      <div className="custom-toast-content bg-white border border-[#BFDBFE] text-[#1E3A8A] rounded-xl p-4 shadow">
+        <p className="text-sm">Are you sure you want to delete this staff member? This action cannot be undone.</p>
         <div className="toast-buttons mt-3 flex gap-2 justify-end">
           <button
             onClick={() => {
               toast.dismiss(t.id);
               confirmDeleteStaff(staffId);
             }}
-            className="toast-btn-yes rounded-lg bg-gradient-to-r from-fuchsia-600 to-cyan-500 px-3 py-1.5 text-sm font-semibold text-white shadow-[0_0_12px_rgba(255,0,255,0.6)] hover:scale-105 transition"
+            className="toast-btn-yes rounded-lg bg-[#3B82F6] hover:bg-[#1E40AF] text-white px-3 py-1.5 text-sm font-semibold transition"
           >
             Yes
           </button>
           <button
             onClick={() => toast.dismiss(t.id)}
-            className="toast-btn-no rounded-lg border border-cyan-400 px-3 py-1.5 text-sm font-semibold text-white hover:bg-cyan-500/10 shadow-[0_0_10px_rgba(0,255,255,0.5)]"
+            className="toast-btn-no rounded-lg border border-[#BFDBFE] text-[#1E40AF] px-3 py-1.5 text-sm font-semibold hover:bg-[#EFF6FF] transition"
           >
             No
           </button>
@@ -186,6 +185,8 @@ const AdminStaffPage = () => {
       staffId: '', name: '', role: '', email: '', age: '', password: '', address: '', isDisable: false
     });
   };
+
+  //download pdf
 
   const downloadPdf = (staffToDownload, title) => {
     const doc = new jsPDF();
@@ -208,9 +209,9 @@ const AdminStaffPage = () => {
   };
 
   const renderStaffTable = (staffToRender) => (
-    <div className="table-responsive overflow-x-auto rounded-xl border border-fuchsia-600 shadow-[0_0_15px_rgba(255,0,255,0.5)]">
-      <table className="staff-table w-full text-sm text-left text-white">
-        <thead className="bg-gray-800 text-fuchsia-400">
+    <div className="table-responsive overflow-x-auto rounded-xl border border-[#BFDBFE] bg-[#DBEAFE] shadow-sm">
+      <table className="staff-table w-full text-sm text-left">
+        <thead className="bg-[#BFDBFE] text-[#1E40AF]">
           <tr>
             <th className="px-4 py-2">ID</th>
             <th className="px-4 py-2">Name</th>
@@ -224,31 +225,40 @@ const AdminStaffPage = () => {
         </thead>
         <tbody>
           {staffToRender.map(staff => (
-            <tr key={staff._id} className="border-b border-gray-700 hover:bg-gray-800/50">
-              <td className="px-4 py-2">{staff.staffId}</td>
-              <td className="px-4 py-2">{staff.name}</td>
-              <td className="px-4 py-2">{staff.role}</td>
-              <td className="px-4 py-2">{staff.email}</td>
-              <td className="px-4 py-2">{staff.age}</td>
-              <td className="px-4 py-2">{staff.address}</td>
+            <tr key={staff._id} className="border-b border-[#BFDBFE] hover:bg-[#EFF6FF]">
+              <td className="px-4 py-2 text-[#1E3A8A]">{staff.staffId}</td>
+              <td className="px-4 py-2 text-[#1E3A8A]">{staff.name}</td>
+              <td className="px-4 py-2 text-[#1E3A8A]">{staff.role}</td>
+              <td className="px-4 py-2 text-[#1E3A8A]">{staff.email}</td>
+              <td className="px-4 py-2 text-[#1E3A8A]">{staff.age}</td>
+              <td className="px-4 py-2 text-[#1E3A8A]">{staff.address}</td>
               <td className="px-4 py-2">
                 {staff.isDisable ? (
-                  <span className="deactivated-status inline-flex items-center rounded-full bg-red-600/20 text-red-300 px-2.5 py-0.5 text-xs border border-red-500/60 shadow-[0_0_8px_rgba(255,0,0,0.5)]">Deactivated</span>
+                  <span className="deactivated-status inline-flex items-center rounded-full bg-[#EF4444]/10 text-[#EF4444] px-2.5 py-0.5 text-xs border border-[#EF4444]/40">
+                    Deactivated
+                  </span>
                 ) : (
-                  <span className="active-status inline-flex items-center rounded-full bg-green-600/20 text-green-300 px-2.5 py-0.5 text-xs border border-green-500/60 shadow-[0_0_8px_rgba(0,255,0,0.5)]">Active</span>
+                  <span className="active-status inline-flex items-center rounded-full bg-[#22C55E]/10 text-[#22C55E] px-2.5 py-0.5 text-xs border border-[#22C55E]/40">
+                    Active
+                  </span>
                 )}
               </td>
               <td className="px-4 py-2">
-                <button className="edit-btn inline-flex items-center justify-center rounded-lg border border-cyan-400 px-2.5 py-1.5 mr-2 hover:bg-cyan-500/10 text-cyan-200 shadow-[0_0_10px_rgba(0,255,255,0.5)]">
+                <button className="edit-btn inline-flex items-center justify-center rounded-lg border border-[#BFDBFE] text-[#1E40AF] px-2.5 py-1.5 mr-2 hover:bg-[#EFF6FF]"
+                onClick={() => handleEditClick(staff)}  
+                >
                   <FaEdit />
                 </button>
                 <button
-                  className={`${staff.isDisable ? 'activate' : 'deactivate'} inline-flex items-center justify-center rounded-lg px-2.5 py-1.5 mr-2 text-white shadow-[0_0_12px_rgba(255,0,255,0.5)] ${staff.isDisable ? 'bg-gradient-to-r from-green-600 to-cyan-500' : 'bg-gradient-to-r from-fuchsia-600 to-cyan-500'}`}
+                  className={`${staff.isDisable ? 'activate' : 'deactivate'} inline-flex items-center justify-center rounded-lg px-2.5 py-1.5 mr-2 text-white ${staff.isDisable ? 'bg-[#22C55E] hover:bg-[#16A34A]' : 'bg-[#3B82F6] hover:bg-[#1E40AF]'} transition`}
                   onClick={() => handleToggleAccountStatus(staff._id)}
                   disabled={togglingStaffId === staff._id}>
                   {staff.isDisable ? 'Activate' : 'Deactivate'}
                 </button>
-                <button className="delete-btn inline-flex items-center justify-center rounded-lg bg-red-600/80 px-2.5 py-1.5 text-white hover:bg-red-600 shadow-[0_0_12px_rgba(255,0,0,0.6)]" onClick={() => deleteStaff(staff._id)}>
+                <button
+                  className="delete-btn inline-flex items-center justify-center rounded-lg bg-[#EF4444] hover:bg-[#DC2626] px-2.5 py-1.5 text-white transition"
+                  onClick={() => deleteStaff(staff._id)}
+                >
                   <FaTrashAlt />
                 </button>
               </td>
@@ -260,68 +270,206 @@ const AdminStaffPage = () => {
   );
 
   return (
-    <div className="admin-staff-container min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white p-6 space-y-6">
-      <h2 className="text-2xl font-bold text-fuchsia-400 drop-shadow-[0_0_10px_#f0f]">Add New Staff</h2>
+    <div className="admin-staff-container min-h-screen bg-gradient-to-br from-[#DBEAFE] via-[#E0ECFF] to-white text-[#1E3A8A] p-6 space-y-6">
+      <h2 className="text-2xl font-bold text-[#1E40AF]">Add New Staff</h2>
 
-      <form className="staff-form grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 bg-gray-950/70 border border-cyan-400 p-4 rounded-xl shadow-[0_0_15px_rgba(0,255,255,0.4)]" onSubmit={addStaff}>
-        <input type="text" name="staffId" placeholder="Staff ID" value={newStaff.staffId} onChange={handleAddInputChange} required className="rounded-lg bg-gray-900 border border-cyan-400 px-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-fuchsia-500" />
-        <input type="text" name="name" placeholder="Name" value={newStaff.name} onChange={handleAddInputChange} required className="rounded-lg bg-gray-900 border border-cyan-400 px-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-fuchsia-500" />
-        <select name="role" value={newStaff.role} onChange={handleAddInputChange} required className="rounded-lg bg-gray-900 border border-cyan-400 px-3 py-2 text-sm text-white focus:ring-2 focus:ring-fuchsia-500">
+      <form
+        className="staff-form grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 bg-white border border-[#BFDBFE] p-4 rounded-xl shadow-sm"
+        onSubmit={addStaff}
+      >
+        <input
+          type="text"
+          name="staffId"
+          placeholder="Staff ID"
+          value={newStaff.staffId}
+          onChange={handleAddInputChange}
+          required
+          className="rounded-lg bg-white border border-[#BFDBFE] px-3 py-2 text-sm text-[#1E3A8A] placeholder-[#1E3A8A]/60 focus:ring-2 focus:ring-[#3B82F6] focus:border-[#3B82F6]"
+        />
+        <input
+          type="text"
+          name="name"
+          placeholder="Name"
+          value={newStaff.name}
+          onChange={handleAddInputChange}
+          required
+          className="rounded-lg bg-white border border-[#BFDBFE] px-3 py-2 text-sm text-[#1E3A8A] placeholder-[#1E3A8A]/60 focus:ring-2 focus:ring-[#3B82F6] focus:border-[#3B82F6]"
+        />
+        <select
+          name="role"
+          value={newStaff.role}
+          onChange={handleAddInputChange}
+          required
+          className="rounded-lg bg-white border border-[#BFDBFE] px-3 py-2 text-sm text-[#1E3A8A] focus:ring-2 focus:ring-[#3B82F6] focus:border-[#3B82F6]"
+        >
           <option value="" disabled>Select a role</option>
           <option value="productManager">Product Manager</option>
           <option value="inventoryManager">Inventory Manager</option>
           <option value="technician">Technician</option>
           <option value="salesManager">Sales Manager</option>
         </select>
-        <input type="email" name="email" placeholder="Email" value={newStaff.email} onChange={handleAddInputChange} required className="rounded-lg bg-gray-900 border border-cyan-400 px-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-fuchsia-500" />
-        <input type="number" name="age" placeholder="Age" value={newStaff.age} onChange={handleAddInputChange} required className="rounded-lg bg-gray-900 border border-cyan-400 px-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-fuchsia-500" />
-        <input type="password" name="password" placeholder="Password" value={newStaff.password} onChange={handleAddInputChange} required className="rounded-lg bg-gray-900 border border-cyan-400 px-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-fuchsia-500" />
-        <input type="text" name="address" placeholder="Address" value={newStaff.address} onChange={handleAddInputChange} required className="rounded-lg bg-gray-900 border border-cyan-400 px-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-fuchsia-500 md:col-span-2 lg:col-span-1" />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={newStaff.email}
+          onChange={handleAddInputChange}
+          required
+          className="rounded-lg bg-white border border-[#BFDBFE] px-3 py-2 text-sm text-[#1E3A8A] placeholder-[#1E3A8A]/60 focus:ring-2 focus:ring-[#3B82F6] focus:border-[#3B82F6]"
+        />
+        <input
+          type="number"
+          name="age"
+          placeholder="Age"
+          value={newStaff.age}
+          onChange={handleAddInputChange}
+          required
+          className="rounded-lg bg-white border border-[#BFDBFE] px-3 py-2 text-sm text-[#1E3A8A] placeholder-[#1E3A8A]/60 focus:ring-2 focus:ring-[#3B82F6] focus:border-[#3B82F6]"
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={newStaff.password}
+          onChange={handleAddInputChange}
+          required
+          className="rounded-lg bg-white border border-[#BFDBFE] px-3 py-2 text-sm text-[#1E3A8A] placeholder-[#1E3A8A]/60 focus:ring-2 focus:ring-[#3B82F6] focus:border-[#3B82F6]"
+        />
+        <input
+          type="text"
+          name="address"
+          placeholder="Address"
+          value={newStaff.address}
+          onChange={handleAddInputChange}
+          required
+          className="rounded-lg bg-white border border-[#BFDBFE] px-3 py-2 text-sm text-[#1E3A8A] placeholder-[#1E3A8A]/60 focus:ring-2 focus:ring-[#3B82F6] focus:border-[#3B82F6] md:col-span-2 lg:col-span-1"
+        />
         <div className="col-span-full flex gap-3">
-          <button type="submit" className="rounded-lg bg-gradient-to-r from-fuchsia-600 to-cyan-500 px-4 py-2 text-sm font-bold text-white shadow-[0_0_12px_rgba(255,0,255,0.6)] hover:scale-105 transition">Add Staff</button>
-          <button type="button" onClick={handleClearForm} className="rounded-lg border border-cyan-400 px-4 py-2 text-sm font-bold text-white hover:bg-cyan-500/10 shadow-[0_0_10px_rgba(0,255,255,0.5)]">Clear Form</button>
+          <button
+            type="submit"
+            className="rounded-lg bg-[#3B82F6] hover:bg-[#1E40AF] px-4 py-2 text-sm font-semibold text-white shadow transition"
+          >
+            Add Staff
+          </button>
+          <button
+            type="button"
+            onClick={handleClearForm}
+            className="rounded-lg border border-[#BFDBFE] text-[#1E40AF] hover:bg-[#EFF6FF] px-4 py-2 text-sm font-semibold transition"
+          >
+            Clear Form
+          </button>
         </div>
       </form>
 
-      <hr className="border-fuchsia-600/60" />
+      <hr className="border-[#BFDBFE]" />
 
       {editingStaff && (
         <>
-          <h2 className="text-2xl font-bold text-fuchsia-400 drop-shadow-[0_0_10px_#f0f]">Edit Staff Member</h2>
-          <form className="staff-form grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 bg-gray-950/70 border border-fuchsia-600 p-4 rounded-xl shadow-[0_0_15px_rgba(255,0,255,0.4)]" onSubmit={editStaff}>
-            <input type="text" name="name" placeholder="Name" value={editingStaff.name} onChange={handleEditInputChange} required className="rounded-lg bg-gray-900 border border-cyan-400 px-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-fuchsia-500" />
-            <input type="text" name="role" placeholder="Role" value={editingStaff.role} onChange={handleEditInputChange} required className="rounded-lg bg-gray-900 border border-cyan-400 px-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-fuchsia-500" />
-            <input type="email" name="email" placeholder="Email" value={editingStaff.email} onChange={handleEditInputChange} required className="rounded-lg bg-gray-900 border border-cyan-400 px-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-fuchsia-500" />
-            <input type="number" name="age" placeholder="Age" value={editingStaff.age} onChange={handleEditInputChange} required className="rounded-lg bg-gray-900 border border-cyan-400 px-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-fuchsia-500" />
-            <input type="text" name="address" placeholder="Address" value={editingStaff.address} onChange={handleEditInputChange} required className="rounded-lg bg-gray-900 border border-cyan-400 px-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-fuchsia-500" />
-            <label className="flex items-center gap-2 text-sm text-cyan-200">
+          <h2 className="text-2xl font-bold text-[#1E40AF]">Edit Staff Member</h2>
+          <form
+            className="staff-form grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 bg-white border border-[#BFDBFE] p-4 rounded-xl shadow-sm"
+            onSubmit={editStaff}
+          >
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              value={editingStaff.name}
+              onChange={handleEditInputChange}
+              required
+              className="rounded-lg bg-white border border-[#BFDBFE] px-3 py-2 text-sm text-[#1E3A8A] placeholder-[#1E3A8A]/60 focus:ring-2 focus:ring-[#3B82F6] focus:border-[#3B82F6]"
+            />
+            <input
+              type="text"
+              name="role"
+              placeholder="Role"
+              value={editingStaff.role}
+              onChange={handleEditInputChange}
+              required
+              className="rounded-lg bg-white border border-[#BFDBFE] px-3 py-2 text-sm text-[#1E3A8A] placeholder-[#1E3A8A]/60 focus:ring-2 focus:ring-[#3B82F6] focus:border-[#3B82F6]"
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={editingStaff.email}
+              onChange={handleEditInputChange}
+              required
+              className="rounded-lg bg-white border border-[#BFDBFE] px-3 py-2 text-sm text-[#1E3A8A] placeholder-[#1E3A8A]/60 focus:ring-2 focus:ring-[#3B82F6] focus:border-[#3B82F6]"
+            />
+            <input
+              type="number"
+              name="age"
+              placeholder="Age"
+              value={editingStaff.age}
+              onChange={handleEditInputChange}
+              required
+              className="rounded-lg bg-white border border-[#BFDBFE] px-3 py-2 text-sm text-[#1E3A8A] placeholder-[#1E3A8A]/60 focus:ring-2 focus:ring-[#3B82F6] focus:border-[#3B82F6]"
+            />
+            <input
+              type="text"
+              name="address"
+              placeholder="Address"
+              value={editingStaff.address}
+              onChange={handleEditInputChange}
+              required
+              className="rounded-lg bg-white border border-[#BFDBFE] px-3 py-2 text-sm text-[#1E3A8A] placeholder-[#1E3A8A]/60 focus:ring-2 focus:ring-[#3B82F6] focus:border-[#3B82F6]"
+            />
+            <label className="flex items-center gap-2 text-sm text-[#1E3A8A]">
               Is Disabled:
-              <input type="checkbox" name="isDisable" checked={editingStaff.isDisable} onChange={handleEditInputChange} className="h-4 w-4 accent-fuchsia-600" />
+              <input
+                type="checkbox"
+                name="isDisable"
+                checked={editingStaff.isDisable}
+                onChange={handleEditInputChange}
+                className="h-4 w-4 accent-[#3B82F6]"
+              />
             </label>
             <div className="col-span-full flex gap-3">
-              <button type="submit" className="rounded-lg bg-gradient-to-r from-fuchsia-600 to-cyan-500 px-4 py-2 text-sm font-bold text-white shadow-[0_0_12px_rgba(255,0,255,0.6)] hover:scale-105 transition">Save Changes</button>
-              <button type="button" onClick={() => setEditingStaff(null)} className="rounded-lg border border-cyan-400 px-4 py-2 text-sm font-bold text-white hover:bg-cyan-500/10 shadow-[0_0_10px_rgba(0,255,255,0.5)]">Cancel</button>
+              <button
+                type="submit"
+                className="rounded-lg bg-[#3B82F6] hover:bg-[#1E40AF] px-4 py-2 text-sm font-semibold text-white shadow transition"
+              >
+                Save Changes
+              </button>
+              <button
+                type="button"
+                onClick={() => setEditingStaff(null)}
+                className="rounded-lg border border-[#BFDBFE] text-[#1E40AF] hover:bg-[#EFF6FF] px-4 py-2 text-sm font-semibold transition"
+              >
+                Cancel
+              </button>
             </div>
           </form>
-          <hr className="border-fuchsia-600/60" />
+          <hr className="border-[#BFDBFE]" />
         </>
       )}
 
-      <h2 className="text-xl font-semibold text-cyan-300">Logged-In Staff</h2>
-      <button className="download-btn rounded-lg bg-gradient-to-r from-cyan-500 to-fuchsia-600 px-4 py-2 text-sm font-bold text-white shadow-[0_0_12px_rgba(0,255,255,0.6)] hover:scale-105 transition mb-3" onClick={() => downloadPdf(loggedInStaff, 'Logged-In Staff Report')}>Download Logged-In Staff PDF</button>
+      <h2 className="text-xl font-semibold text-[#1E40AF]">Logged-In Staff</h2>
+      <button
+        className="download-btn rounded-lg bg-[#3B82F6] hover:bg-[#1E40AF] px-4 py-2 text-sm font-semibold text-white shadow transition mb-3"
+        onClick={() => downloadPdf(loggedInStaff, 'Logged-In Staff Report')}
+      >
+        Download Logged-In Staff PDF
+      </button>
       {loggedInStaff.length > 0 ? (
         renderStaffTable(loggedInStaff)
       ) : (
-        <p className="text-gray-400">No staff members have logged in yet.</p>
+        <p className="text-[#1E3A8A]">No staff members have logged in yet.</p>
       )}
-      <hr className="border-fuchsia-600/60" />
+      <hr className="border-[#BFDBFE]" />
 
-      <h2 className="text-xl font-semibold text-cyan-300">Newly Created Staff (Never Logged In)</h2>
-      <button className="download-btn rounded-lg bg-gradient-to-r from-cyan-500 to-fuchsia-600 px-4 py-2 text-sm font-bold text-white shadow-[0_0_12px_rgba(0,255,255,0.6)] hover:scale-105 transition mb-3" onClick={() => downloadPdf(newlyCreatedStaff, 'Newly Created Staff Report')}>Download New Staff PDF</button>
+      <h2 className="text-xl font-semibold text-[#1E40AF]">Newly Created Staff (Never Logged In)</h2>
+      <button
+        className="download-btn rounded-lg bg-[#3B82F6] hover:bg-[#1E40AF] px-4 py-2 text-sm font-semibold text-white shadow transition mb-3"
+        onClick={() => downloadPdf(newlyCreatedStaff, 'Newly Created Staff Report')}
+      >
+        Download New Staff PDF
+      </button>
       {newlyCreatedStaff.length > 0 ? (
         renderStaffTable(newlyCreatedStaff)
       ) : (
-        <p className="text-gray-400">No new staff accounts have been created recently.</p>
+        <p className="text-[#1E3A8A]">No new staff accounts have been created recently.</p>
       )}
     </div>
   );

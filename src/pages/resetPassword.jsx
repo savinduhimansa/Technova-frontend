@@ -56,23 +56,23 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black p-6 relative overflow-hidden">
-      {/* Neon glow background */}
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#DBEAFE] via-[#EFF6FF] to-white p-6 relative overflow-hidden">
+      {/* Soft background glow */}
       <div className="absolute inset-0 opacity-20">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,0,255,0.3),transparent_50%)] animate-pulse" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(0,255,255,0.3),transparent_50%)] animate-pulse delay-500" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.2),transparent_50%)] animate-pulse" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(191,219,254,0.3),transparent_50%)] animate-pulse delay-500" />
       </div>
 
-      <div className="relative z-10 w-full max-w-md bg-black/70 border border-fuchsia-600 rounded-2xl shadow-[0_0_25px_rgba(255,0,255,0.4)] backdrop-blur-md p-8">
-        <h2 className="text-2xl font-bold mb-4 text-center bg-gradient-to-r from-fuchsia-400 via-cyan-300 to-fuchsia-400 bg-clip-text text-transparent drop-shadow-[0_0_10px_#0ff]">
+      <div className="relative z-10 w-full max-w-md bg-white/90 border border-[#BFDBFE] rounded-2xl shadow-[0_0_25px_rgba(59,130,246,0.25)] backdrop-blur-md p-8">
+        <h2 className="text-2xl font-bold mb-4 text-center text-[#1E40AF]">
           Set New Password
         </h2>
-        <p className="text-gray-400 text-sm mb-6 text-center">
+        <p className="text-[#1E3A8A]/80 text-sm mb-6 text-center">
           Enter your new password below.
         </p>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="form-group">
-            <label htmlFor="password" className="block text-sm font-medium text-fuchsia-400 mb-2">
+            <label htmlFor="password" className="block text-sm font-medium text-[#1E40AF] mb-2">
               New Password
             </label>
             <input
@@ -81,14 +81,14 @@ const ResetPassword = () => {
               name="password"
               value={password}
               onChange={handleChange}
-              className="w-full px-4 py-2 rounded-lg bg-gray-900/80 border border-fuchsia-600 text-fuchsia-200 placeholder-fuchsia-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all duration-300"
+              className="w-full px-4 py-2 rounded-lg bg-white border border-[#BFDBFE] text-[#1E3A8A] placeholder-[#1E3A8A]/50 focus:outline-none focus:ring-2 focus:ring-[#3B82F6] transition-all duration-300"
               placeholder="••••••••"
             />
-            {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password}</p>}
+            {errors.password && <p className="text-[#EF4444] text-sm mt-1">{errors.password}</p>}
           </div>
 
           <div className="form-group">
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-fuchsia-400 mb-2">
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-[#1E40AF] mb-2">
               Confirm Password
             </label>
             <input
@@ -97,16 +97,16 @@ const ResetPassword = () => {
               name="confirmPassword"
               value={confirmPassword}
               onChange={handleChange}
-              className="w-full px-4 py-2 rounded-lg bg-gray-900/80 border border-fuchsia-600 text-fuchsia-200 placeholder-fuchsia-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all duration-300"
+              className="w-full px-4 py-2 rounded-lg bg-white border border-[#BFDBFE] text-[#1E3A8A] placeholder-[#1E3A8A]/50 focus:outline-none focus:ring-2 focus:ring-[#3B82F6] transition-all duration-300"
               placeholder="••••••••"
             />
-            {errors.confirmPassword && <p className="text-red-400 text-sm mt-1">{errors.confirmPassword}</p>}
+            {errors.confirmPassword && <p className="text-[#EF4444] text-sm mt-1">{errors.confirmPassword}</p>}
           </div>
 
           <div className="form-actions">
             <button
               type="submit"
-              className="w-full py-2 rounded-lg bg-gradient-to-r from-fuchsia-600 to-cyan-500 text-black font-bold shadow-[0_0_15px_rgba(255,0,255,0.5)] hover:scale-105 transition-transform"
+              className="w-full py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white font-bold shadow-md transition-transform hover:scale-105"
             >
               Reset Password
             </button>

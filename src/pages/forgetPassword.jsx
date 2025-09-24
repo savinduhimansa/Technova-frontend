@@ -63,22 +63,22 @@ const ForgetPassword = () => {
       return (
         <>
           <div className="form-group mb-6">
-            <label htmlFor="email" className="block text-sm font-medium text-fuchsia-400 mb-2">Email Address</label>
+            <label htmlFor="email" className="block text-sm font-semibold text-[#1E40AF] mb-2">Email Address</label>
             <input
               type="email"
               id="email"
               name="email"
               value={email}
               onChange={handleChange}
-              className="w-full px-4 py-2 rounded-lg bg-gray-900/80 border border-fuchsia-600 text-fuchsia-200 placeholder-fuchsia-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all duration-300"
+              className="w-full px-4 py-2 rounded-lg bg-white border border-[#BFDBFE] text-[#1E3A8A] placeholder-[#1E3A8A]/60 focus:outline-none focus:ring-2 focus:ring-[#3B82F6] focus:border-transparent transition"
               placeholder="yourname@example.com"
             />
-            {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email}</p>}
+            {errors.email && <p className="text-[#EF4444] text-sm mt-1">{errors.email}</p>}
           </div>
           <div className="form-actions">
             <button
               type="submit"
-              className="w-full py-2 rounded-lg bg-gradient-to-r from-fuchsia-600 to-cyan-500 text-white font-bold shadow-lg shadow-fuchsia-500/30 hover:scale-105 transition-transform"
+              className="w-full py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white font-semibold shadow-md transition"
             >
               Send OTP
             </button>
@@ -89,48 +89,48 @@ const ForgetPassword = () => {
       return (
         <>
           <div className="form-group mb-4">
-            <label htmlFor="otp" className="block text-sm font-medium text-fuchsia-400 mb-2">OTP</label>
+            <label htmlFor="otp" className="block text-sm font-semibold text-[#1E40AF] mb-2">OTP</label>
             <input
               type="text"
               id="otp"
               name="otp"
               value={otp}
               onChange={handleChange}
-              className="w-full px-4 py-2 rounded-lg bg-gray-900/80 border border-fuchsia-600 text-fuchsia-200 placeholder-fuchsia-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all duration-300"
+              className="w-full px-4 py-2 rounded-lg bg-white border border-[#BFDBFE] text-[#1E3A8A] placeholder-[#1E3A8A]/60 focus:outline-none focus:ring-2 focus:ring-[#3B82F6] focus:border-transparent transition"
               placeholder="Enter the OTP from your email"
             />
-            {errors.otp && <p className="text-red-400 text-sm mt-1">{errors.otp}</p>}
+            {errors.otp && <p className="text-[#EF4444] text-sm mt-1">{errors.otp}</p>}
           </div>
           <div className="form-group mb-4">
-            <label htmlFor="password" className="block text-sm font-medium text-fuchsia-400 mb-2">New Password</label>
+            <label htmlFor="password" className="block text-sm font-semibold text-[#1E40AF] mb-2">New Password</label>
             <input
               type="password"
               id="password"
               name="password"
               value={password}
               onChange={handleChange}
-              className="w-full px-4 py-2 rounded-lg bg-gray-900/80 border border-fuchsia-600 text-fuchsia-200 placeholder-fuchsia-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all duration-300"
+              className="w-full px-4 py-2 rounded-lg bg-white border border-[#BFDBFE] text-[#1E3A8A] placeholder-[#1E3A8A]/60 focus:outline-none focus:ring-2 focus:ring-[#3B82F6] focus:border-transparent transition"
               placeholder="••••••••"
             />
-            {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password}</p>}
+            {errors.password && <p className="text-[#EF4444] text-sm mt-1">{errors.password}</p>}
           </div>
           <div className="form-group mb-6">
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-fuchsia-400 mb-2">Confirm New Password</label>
+            <label htmlFor="confirmPassword" className="block text-sm font-semibold text-[#1E40AF] mb-2">Confirm New Password</label>
             <input
               type="password"
               id="confirmPassword"
               name="confirmPassword"
               value={confirmPassword}
               onChange={handleChange}
-              className="w-full px-4 py-2 rounded-lg bg-gray-900/80 border border-fuchsia-600 text-fuchsia-200 placeholder-fuchsia-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all duration-300"
+              className="w-full px-4 py-2 rounded-lg bg-white border border-[#BFDBFE] text-[#1E3A8A] placeholder-[#1E3A8A]/60 focus:outline-none focus:ring-2 focus:ring-[#3B82F6] focus:border-transparent transition"
               placeholder="••••••••"
             />
-            {errors.confirmPassword && <p className="text-red-400 text-sm mt-1">{errors.confirmPassword}</p>}
+            {errors.confirmPassword && <p className="text-[#EF4444] text-sm mt-1">{errors.confirmPassword}</p>}
           </div>
           <div className="form-actions">
             <button
               type="submit"
-              className="w-full py-2 rounded-lg bg-gradient-to-r from-fuchsia-600 to-cyan-500 text-white font-bold shadow-lg shadow-fuchsia-500/30 hover:scale-105 transition-transform"
+              className="w-full py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white font-semibold shadow-md transition"
             >
               Reset Password
             </button>
@@ -141,18 +141,18 @@ const ForgetPassword = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black p-6 relative overflow-hidden">
-      {/* Neon background effects */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,0,255,0.3),transparent_50%)] animate-pulse" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(0,255,255,0.3),transparent_50%)] animate-pulse delay-500" />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#DBEAFE] via-[#E0ECFF] to-white p-6 relative overflow-hidden">
+      {/* Subtle Blue Horizon glows */}
+      <div className="absolute inset-0 opacity-40 pointer-events-none">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.25),transparent_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(191,219,254,0.35),transparent_55%)]" />
       </div>
 
-      <div className="relative z-10 w-full max-w-md bg-black/70 border border-fuchsia-600 rounded-2xl shadow-[0_0_30px_rgba(255,0,255,0.35)] backdrop-blur-md p-8">
-        <h2 className="text-2xl font-bold mb-4 text-center bg-gradient-to-r from-fuchsia-400 via-cyan-300 to-fuchsia-400 bg-clip-text text-transparent">
+      <div className="relative z-10 w-full max-w-md bg-white/80 border border-[#BFDBFE] rounded-2xl shadow-xl backdrop-blur-md p-8">
+        <h2 className="text-2xl font-bold mb-2 text-center text-[#1E40AF]">
           {step === 1 ? 'Forgot Your Password?' : 'Enter OTP & New Password'}
         </h2>
-        <p className="text-gray-400 text-sm mb-6 text-center">
+        <p className="text-[#1E3A8A]/80 text-sm mb-6 text-center">
           {step === 1 ? 'Enter your email address to get a password reset OTP.' : `An OTP has been sent to ${email}.`}
         </p>
         <form onSubmit={handleSubmit}>

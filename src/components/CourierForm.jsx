@@ -100,7 +100,7 @@ export default function CourierForm() {
         </div>
       </section>
 
-      {/* MANAGE COURIERS */}
+      {/* MANAGE COURIERS 
       <section className="rounded-xl border border-[#BFDBFE] bg-white p-5 shadow-sm">
         <h3 className="text-lg font-semibold text-[#1E40AF] mb-3">Manage Couriers</h3>
         <div className="overflow-x-auto rounded-xl border border-[#BFDBFE]">
@@ -140,7 +140,7 @@ export default function CourierForm() {
             </tbody>
           </table>
         </div>
-      </section>
+      </section>*/}
     </div>
   );
 }
