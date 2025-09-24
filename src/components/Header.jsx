@@ -1,70 +1,114 @@
+// src/components/Header.jsx
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import { useCart } from "../context/CartContext";
+import { FiShoppingCart, FiLogOut, FiLogIn, FiUserPlus, FiLayout } from "react-icons/fi";
+
+/* Read role from JWT in localStorage (no context needed) */
+function getRoleFromToken() {
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  if (!token) return null;
+  try {
+    const payload = JSON.parse(
+      atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))
+    );
+    // normalize: admin / inventoryManager / productManager / technician / salesManager
+    const r = String(payload?.role || "").toLowerCase().replace(/[\s_-]/g, "");
+    return r || null;
+  } catch {
+    return null;
+  }
+}
+
+/* Map role -> dashboard path + label */
+function roleToDashboard(roleNorm) {
+  switch (roleNorm) {
+    case "admin":
+      return { to: "/admindashboard", label: "Admin Dashboard" };
+    case "inventorymanager":
+      return { to: "/inv/dashboard", label: "Inventory Dashboard" };
+    case "productmanager":
+      return { to: "/productManager", label: "Product Manager" };
+    case "technician":
+      return { to: "/technician", label: "Technician" };
+    case "salesmanager":
+      return { to: "/salesdashboard", label: "Sales Dashboard" };
+    default:
+      return null;
+  }
+}
 
 export default function Header() {
-  const { isAuthed, user, logout } = useAuth();
-  const { items } = useCart();
   const navigate = useNavigate();
 
-  const count = items.reduce((s, it) => s + it.quantity, 0);
+  const roleNorm = getRoleFromToken();      // e.g., "admin", "inventorymanager", etc.
+  const authed = !!roleNorm;
+  const dash = roleToDashboard(roleNorm);
+
+  const handleLogout = () => {
+    try {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("authType");
+    } catch {}
+    navigate("/");
+  };
 
   return (
-    <header className="w-full sticky top-0 z-50 border-b border-fuchsia-500/20 bg-slate-950/80 backdrop-blur">
+    <header className="w-full sticky top-0 z-50 border-b border-[#BFDBFE] bg-white">
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+        {/* Brand */}
         <Link
           to="/"
-          className="font-bold text-lg text-fuchsia-300 drop-shadow-[0_0_10px_rgba(217,70,239,0.6)]"
+          className="font-bold text-lg text-[#1E40AF]"
         >
           TechNova
         </Link>
 
+        {/* Right side actions */}
         <nav className="flex items-center gap-3">
+          {/* Cart link (no context required) */}
           <Link
             to="/cart"
-            className="relative px-3 py-1.5 rounded-lg border border-cyan-400/40 text-cyan-300 hover:bg-cyan-500/10 transition"
+            className="inline-flex items-center gap-2 rounded-lg px-3 py-2 border border-[#BFDBFE] text-[#1E40AF] hover:bg-[#EFF6FF] transition"
+            title="Cart"
           >
-            🛒 Cart
-            {count > 0 && (
-              <span className="absolute -top-2 -right-2 text-xs bg-cyan-500 text-slate-900 rounded-full px-1.5 py-0.5 shadow-[0_0_12px_rgba(34,211,238,0.6)]">
-                {count}
-              </span>
-            )}
+            <FiShoppingCart />
+            <span className="hidden sm:inline">Cart</span>
           </Link>
 
-          {!isAuthed ? (
+          {!authed ? (
             <>
               <Link
                 to="/login"
-                className="px-3 py-1.5 rounded-lg border border-fuchsia-400/40 text-fuchsia-300 hover:bg-fuchsia-500/10 transition"
+                className="inline-flex items-center gap-2 rounded-lg px-3 py-2 border border-[#BFDBFE] text-[#1E40AF] hover:bg-[#EFF6FF] transition"
               >
+                <FiLogIn />
                 Sign in
               </Link>
               <Link
                 to="/signup"
-                className="px-3 py-1.5 rounded-lg bg-cyan-500/90 text-slate-900 font-semibold hover:bg-cyan-400 transition shadow-[0_0_18px_rgba(34,211,238,0.45)]"
+                className="inline-flex items-center gap-2 rounded-lg px-3 py-2 bg-[#3B82F6] text-white hover:bg-[#2563EB] transition"
               >
+                <FiUserPlus />
                 Sign up
               </Link>
             </>
           ) : (
             <>
-              <span className="text-sm text-slate-300 hidden sm:block">
-                Hi, {user?.email}
-              </span>
-              <Link
-                to="/salesdashboard"
-                className="px-3 py-1.5 rounded-lg border border-emerald-400/40 text-emerald-300 hover:bg-emerald-500/10 transition"
-              >
-                Dashboard
-              </Link>
+              {dash && (
+                <Link
+                  to={dash.to}
+                  className="inline-flex items-center gap-2 rounded-lg px-3 py-2 border border-[#BFDBFE] text-[#1E40AF] hover:bg-[#EFF6FF] transition"
+                >
+                  <FiLayout />
+                  {dash.label}
+                </Link>
+              )}
+
               <button
-                onClick={() => {
-                  logout();
-                  navigate("/");
-                }}
-                className="px-3 py-1.5 rounded-lg border border-rose-400/40 text-rose-300 hover:bg-rose-500/10 transition"
+                onClick={handleLogout}
+                className="inline-flex items-center gap-2 rounded-lg px-3 py-2 border border-[#BFDBFE] text-[#1E40AF] hover:bg-[#EFF6FF] transition"
               >
+                <FiLogOut />
                 Logout
               </button>
             </>

@@ -1,3 +1,8 @@
+// src/api/product.js
 import api from "./client";
 
-export const getProducts = () => api.get("/products");
+// ✅ Always normalize to array
+export const getProductsList = async (params) => {
+  const res = await api.get("/products", { params }); // singular
+  return res?.data?.data ?? [];
+};
