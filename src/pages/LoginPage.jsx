@@ -5,32 +5,37 @@ import toast from 'react-hot-toast';
 import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
-  // State to hold form data
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const navigate = useNavigate();
 
-  // Handle changes in form fields
+  const [greetEmail, setGreetEmail] = useState(''); // NEW
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
+    setFormData(prevState => ({ ...prevState, [name]: value }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const { email, password } = formData;
 
-    // log in as a user
+    // Try login as user first
     axios.post("http://localhost:5001/api/user/login", { email, password })
       .then((response) => {
         toast.success("Login successful");
-        localStorage.setItem("token", response.data.token);
-        const user = response.data.user;
+        const { token, user } = response.data;
+
+        // ✅ Save to localStorage
+        localStorage.setItem("token", token);
+        localStorage.setItem("authType", "user");
+        localStorage.setItem("user", JSON.stringify(user || {}));
+
+        // ✅ Set default header for future axios requests
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+
+        setGreetEmail(user?.email || email); // NEW
+        toast.success(`Hi, ${user?.email || email}`); // NEW
+
         if (user.role === "admin") {
           navigate("/admindashboard");
         } else {
@@ -38,15 +43,24 @@ const LoginPage = () => {
         }
       })
       .catch(() => {
-        // User login failed, now attempt staff login
+        // If user login fails, try staff login
         axios.post("http://localhost:5001/api/staff/login", { email, password })
           .then((staffResponse) => {
             toast.success("Login successful");
-            localStorage.setItem("token", staffResponse.data.token);
+            const { token, user: staffMember } = staffResponse.data;
 
-            const staffMember = staffResponse.data.user;
+            // ✅ Save staff details
+            localStorage.setItem("token", token);
+            localStorage.setItem("authType", "staff");
+            localStorage.setItem("user", JSON.stringify(staffMember || {}));
+
+            axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+
+            setGreetEmail(staffMember?.email || email); // NEW
+            toast.success(`Hi, ${staffMember?.email || email}`); // NEW
+
             if (staffMember.role === 'inventoryManager') {
-              navigate("/inventoryManager", { state: { email: staffMember.email } });
+              navigate("/inv/dashboard", { state: { email: staffMember.email } });
             }
             if (staffMember.role === 'productManager') {
               navigate("/productManager", { state: { email: staffMember.email } });
@@ -65,14 +79,20 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black text-white">
-      <div className="w-full max-w-md p-8 rounded-2xl bg-gray-950/80 border border-fuchsia-500 shadow-[0_0_25px_rgba(255,0,255,0.6)]">
-        <h2 className="text-3xl font-extrabold text-fuchsia-400 text-center drop-shadow-[0_0_10px_#f0f]">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#DBEAFE] via-[#E0ECFF] to-white text-[#1E3A8A]">
+      <div className="w-full max-w-md p-8 rounded-2xl bg-white/90 border border-[#BFDBFE] shadow-[0_0_25px_rgba(59,130,246,0.3)]">
+        <h2 className="text-3xl font-extrabold text-[#1E40AF] text-center drop-shadow-sm">
           Welcome Back!
         </h2>
-        <p className="mt-2 text-center text-sm text-cyan-300">
+        <p className="mt-2 text-center text-sm text-[#1E3A8A]/80">
           Login to your account!
         </p>
+
+        {greetEmail && ( // NEW
+          <p className="mt-3 text-center text-sm font-semibold text-[#1E40AF]">
+            Hi, {greetEmail}
+          </p>
+        )}
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-5">
           {/* Email input */}
@@ -83,7 +103,7 @@ const LoginPage = () => {
               placeholder="Email Address"
               value={formData.email}
               onChange={handleChange}
-              className="w-full rounded-lg bg-gray-900 border border-cyan-400 px-4 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 shadow-[0_0_10px_rgba(0,255,255,0.5)]"
+              className="w-full rounded-lg bg-white border border-[#BFDBFE] px-4 py-2 text-sm text-[#1E3A8A] placeholder-[#1E3A8A]/60 focus:outline-none focus:ring-2 focus:ring-[#3B82F6] shadow-sm"
             />
           </div>
 
@@ -95,13 +115,13 @@ const LoginPage = () => {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full rounded-lg bg-gray-900 border border-cyan-400 px-4 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 shadow-[0_0_10px_rgba(0,255,255,0.5)]"
+              className="w-full rounded-lg bg-white border border-[#BFDBFE] px-4 py-2 text-sm text-[#1E3A8A] placeholder-[#1E3A8A]/60 focus:outline-none focus:ring-2 focus:ring-[#3B82F6] shadow-sm"
             />
           </div>
 
           {/* Forgot password */}
           <div className="text-right">
-            <a href="/forget" className="text-xs text-fuchsia-400 hover:underline hover:text-fuchsia-300">
+            <a href="/forget" className="text-xs text-[#3B82F6] hover:underline hover:text-[#1E40AF]">
               Forgot password?
             </a>
           </div>
@@ -109,16 +129,16 @@ const LoginPage = () => {
           {/* Login button */}
           <button
             type="submit"
-            className="w-full rounded-lg bg-gradient-to-r from-fuchsia-600 to-cyan-500 px-4 py-2 text-sm font-bold text-white shadow-[0_0_15px_rgba(0,255,255,0.7)] hover:scale-105 transition-transform"
+            className="w-full rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] px-4 py-2 text-sm font-bold text-white shadow-md transition-transform hover:scale-105"
           >
             Login
           </button>
         </form>
 
         {/* Signup link */}
-        <p className="mt-6 text-center text-sm text-gray-400">
+        <p className="mt-6 text-center text-sm text-[#1E3A8A]/70">
           Don&apos;t have an account?{" "}
-          <a href="/signup" className="text-fuchsia-400 hover:underline hover:text-fuchsia-300">
+          <a href="/signup" className="text-[#3B82F6] hover:underline hover:text-[#1E40AF]">
             Sign up here
           </a>
         </p>

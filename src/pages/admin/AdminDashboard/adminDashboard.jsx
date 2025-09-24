@@ -22,64 +22,91 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="sidebar min-h-screen w-64 bg-black/90 border-r border-fuchsia-600 shadow-[0_0_20px_rgba(255,0,255,0.7)] text-white flex flex-col justify-between">
+    <div className="sidebar min-h-screen w-64 bg-[#1E3A8A] border-r border-[#BFDBFE] shadow-[0_0_18px_rgba(30,58,138,0.25)] text-blue-50 flex flex-col justify-between">
       <div>
-        <div className="logo flex items-center gap-2 px-6 py-4 text-fuchsia-400 text-lg font-bold drop-shadow-[0_0_10px_#f0f]">
+        <div className="logo flex items-center gap-2 px-6 py-4 text-blue-100 text-lg font-bold">
           <FaUserTie />
           Admin Dashboard
         </div>
         <nav>
-          <ul className="space-y-2 px-4">
+          <ul className="space-y-1 px-3">
             <li className="nav-item">
-              <NavLink to="/admindashboard" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-fuchsia-600/20 hover:text-fuchsia-400 transition">
+              <NavLink
+                to="/admindashboard"
+                className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-[#1E40AF] hover:text-white transition"
+              >
                 <FaHome className="nav-icon" />
                 Dashboard
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/admindashboard/users" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-fuchsia-600/20 hover:text-fuchsia-400 transition">
+              <NavLink
+                to="/admindashboard/users"
+                className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-[#1E40AF] hover:text-white transition"
+              >
                 <FaUsers className="nav-icon" />
                 Users
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/admindashboard/staff" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-fuchsia-600/20 hover:text-fuchsia-400 transition">
+              <NavLink
+                to="/admindashboard/staff"
+                className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-[#1E40AF] hover:text-white transition"
+              >
                 <FaSuitcase className="nav-icon" />
                 Staff Members
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/admindashboard/products" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-fuchsia-600/20 hover:text-fuchsia-400 transition">
+              <NavLink
+                to="/admindashboard/products"
+                className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-[#1E40AF] hover:text-white transition"
+              >
                 <FaSitemap className="nav-icon" />
                 Products
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/admindashboard/inventory" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-fuchsia-600/20 hover:text-fuchsia-400 transition">
+              <NavLink
+                to="/admindashboard/inventory"
+                className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-[#1E40AF] hover:text-white transition"
+              >
                 <FaBox className="nav-icon" />
                 Inventory
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/admindashboard/feedback" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-fuchsia-600/20 hover:text-fuchsia-400 transition">
+              <NavLink
+                to="/admindashboard/feedback"
+                className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-[#1E40AF] hover:text-white transition"
+              >
                 <FaStar className="nav-icon" />
                 Feedback & Rating system
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/admindashboard/services" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-fuchsia-600/20 hover:text-fuchsia-400 transition">
+              <NavLink
+                to="/admindashboard/services"
+                className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-[#1E40AF] hover:text-white transition"
+              >
                 <FaServer className="nav-icon" />
                 Services
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/admindashboard/orders" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-fuchsia-600/20 hover:text-fuchsia-400 transition">
+              <NavLink
+                to="/admindashboard/orders"
+                className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-[#1E40AF] hover:text-white transition"
+              >
                 <FaBicycle className="nav-icon" />
                 Orders
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/admindashboard/payments" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-fuchsia-600/20 hover:text-fuchsia-400 transition">
+              <NavLink
+                to="/admindashboard/payments"
+                className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-[#1E40AF] hover:text-white transition"
+              >
                 <FaFile className="nav-icon" />
                 Payments
               </NavLink>
@@ -87,11 +114,11 @@ const Sidebar = () => {
           </ul>
         </nav>
       </div>
-      <div className="user-info px-6 py-4 border-t border-fuchsia-600">
-        <span className="block text-sm text-cyan-300">Admin User</span>
+      <div className="user-info px-6 py-4 border-t border-[#BFDBFE]">
+        <span className="block text-sm text-blue-100/80">Admin User</span>
         <button
           onClick={handleLogout}
-          className="mt-2 w-full rounded-lg bg-gradient-to-r from-fuchsia-600 to-cyan-500 px-3 py-2 text-sm font-bold text-white shadow-[0_0_10px_rgba(0,255,255,0.6)] hover:scale-105 transition-transform"
+          className="mt-2 w-full rounded-md bg-[#3B82F6] px-3 py-2 text-sm font-semibold text-white shadow hover:bg-blue-500 transition"
         >
           Logout
         </button>
@@ -230,58 +257,63 @@ const DashboardContent = () => {
   };
 
   return (
-    <div className="main-content flex-1 bg-gradient-to-br from-black via-gray-900 to-black text-white min-h-screen p-6">
-      <header className="dashboard-header flex justify-between items-center border-b border-fuchsia-600 pb-4 mb-6">
-        <h1 className="text-2xl font-bold text-fuchsia-400 drop-shadow-[0_0_10px_#f0f]">Dashboard Overview</h1>
+    <div className="main-content flex-1 bg-gradient-to-br from-blue-50 via-blue-100 to-white text-[#1E3A8A] min-h-screen p-6">
+      <header className="dashboard-header flex justify-between items-center border-b border-[#BFDBFE] pb-4 mb-6">
+        <h1 className="text-2xl font-bold text-[#1E40AF]">Dashboard Overview</h1>
         <div className="header-right flex items-center gap-3">
-          <input type="text" placeholder="Search..." className="rounded-lg bg-gray-900 border border-cyan-400 px-3 py-1 text-sm text-white focus:ring-2 focus:ring-fuchsia-500 shadow-[0_0_8px_rgba(0,255,255,0.5)]" />
-          <div className="profile-icon h-8 w-8 rounded-full bg-gradient-to-r from-fuchsia-600 to-cyan-500 shadow-[0_0_10px_rgba(255,0,255,0.6)]"></div>
+          <input
+            type="text"
+            placeholder="Search..."
+            className="rounded-md bg-white border border-blue-300 px-3 py-1 text-sm text-[#1E3A8A] focus:ring-2 focus:ring-[#3B82F6] shadow-sm"
+          />
+          <div className="profile-icon h-8 w-8 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 shadow" />
         </div>
       </header>
+
       <div className="widgets-container grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <div className="card bg-gray-900/80 border border-cyan-400 rounded-xl p-4 shadow-[0_0_12px_rgba(0,255,255,0.4)]">
-          <h3 className="text-cyan-300 font-semibold">Total Users</h3>
-          <p className="text-2xl font-bold">{totalUsers}</p>
+        <div className="card bg-[#DBEAFE] border border-[#BFDBFE] rounded-lg p-4 shadow-sm">
+          <h3 className="text-[#1E40AF] font-semibold">Total Users</h3>
+          <p className="text-2xl font-bold text-[#1E3A8A]">{totalUsers}</p>
         </div>
-        <div className="card bg-gray-900/80 border border-cyan-400 rounded-xl p-4 shadow-[0_0_12px_rgba(0,255,255,0.4)]">
-          <h3 className="text-cyan-300 font-semibold">Total Staff</h3>
-          <p className="text-2xl font-bold">{totalStaff}</p>
+        <div className="card bg-[#DBEAFE] border border-[#BFDBFE] rounded-lg p-4 shadow-sm">
+          <h3 className="text-[#1E40AF] font-semibold">Total Staff</h3>
+          <p className="text-2xl font-bold text-[#1E3A8A]">{totalStaff}</p>
         </div>
-        <div className="card bg-gray-900/80 border border-cyan-400 rounded-xl p-4 shadow-[0_0_12px_rgba(0,255,255,0.4)]">
-          <h3 className="text-cyan-300 font-semibold">Total Feedbacks</h3>
-          <p className="text-2xl font-bold">{totalFeedbacks}</p>
-        </div>
-      </div>
-      <div className="widgets-container grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <div className="card bg-gray-900/80 border border-fuchsia-600 rounded-xl p-4 shadow-[0_0_12px_rgba(255,0,255,0.5)]">
-          <h3 className="text-fuchsia-400 font-semibold mb-2">User Accounts Overview</h3>
-          <div className="chart-container">
-            <Pie data={userChartData} options={options} />
-          </div>
-        </div>
-        <div className="card bg-gray-900/80 border border-fuchsia-600 rounded-xl p-4 shadow-[0_0_12px_rgba(255,0,255,0.5)]">
-          <h3 className="text-fuchsia-400 font-semibold mb-2">Staff Accounts Overview</h3>
-          <div className="chart-container">
-            <Pie data={staffChartData} options={options} />
-          </div>
+        <div className="card bg-[#DBEAFE] border border-[#BFDBFE] rounded-lg p-4 shadow-sm">
+          <h3 className="text-[#1E40AF] font-semibold">Total Feedbacks</h3>
+          <p className="text-2xl font-bold text-[#1E3A8A]">{totalFeedbacks}</p>
         </div>
       </div>
-      <div className="widgets-container">
-        <div className="card full-width-card bg-gray-900/80 border border-fuchsia-600 rounded-xl p-4 shadow-[0_0_12px_rgba(255,0,255,0.5)]">
-          <h3 className="text-fuchsia-400 font-semibold mb-2">Feedback Rating Distribution</h3>
-          <div className="chart-container">
-            <Bar data={feedbackChartData} options={options} />
-          </div>
-        </div>
+<div className="card bg-[#DBEAFE] border border-[#BFDBFE] rounded-lg p-4 shadow-sm">
+  <h3 className="text-[#1E40AF] font-semibold mb-2">User Accounts Overview</h3>
+  <div className="chart-container h-90 w-full">
+    <Pie data={userChartData} options={options} />
+  </div>
+</div>
+
+<div className="card bg-[#DBEAFE] border border-[#BFDBFE] rounded-lg p-4 shadow-sm">
+  <h3 className="text-[#1E40AF] font-semibold mb-2">Staff Accounts Overview</h3>
+  <div className="chart-container h-90 w-full">
+    <Pie data={staffChartData} options={options} />
+  </div>
+</div>
+
+<div className="card full-width-card bg-[#DBEAFE] border border-[#BFDBFE] rounded-lg p-4 shadow-sm">
+  <h3 className="text-[#1E40AF] font-semibold mb-2">Feedback Rating Distribution</h3>
+  <div className="chart-container h-90 w-full">
+    <Bar data={feedbackChartData} options={options} />
+  </div>
+</div>
+
       </div>
-    </div>
+
   );
 };
 
 const AdminDashboard = () => {
   const token = localStorage.getItem('token');
   if (!token) {
-    return <FaSearch />;
+    return <FaSearch className="text-[#1E40AF]" />;
   }
 
   return (
@@ -292,12 +324,12 @@ const AdminDashboard = () => {
           <Route path="/" element={<DashboardContent />} />
           <Route path="/users" element={<AdminUserPage />} />
           <Route path="/staff" element={<AdminStaffPage />} />
-          <Route path="/products" element={<h1>Products Page</h1>} />
-          <Route path="/inventory" element={<h1>Inventory Page</h1>} />
+          <Route path="/products" element={<h1 className="text-[#1E40AF] p-6">Products Page</h1>} />
+          <Route path="/inventory" element={<h1 className="text-[#1E40AF] p-6">Inventory Page</h1>} />
           <Route path="/feedback" element={<AdminFeedbackPage />} />
-          <Route path="/services" element={<h1>Services Page</h1>} />
-          <Route path="/orders" element={<h1>Orders Page</h1>} />
-          <Route path="/payments" element={<h1>Payments Page</h1>} />
+          <Route path="/services" element={<h1 className="text-[#1E40AF] p-6">Services Page</h1>} />
+          <Route path="/orders" element={<h1 className="text-[#1E40AF] p-6">Orders Page</h1>} />
+          <Route path="/payments" element={<h1 className="text-[#1E40AF] p-6">Payments Page</h1>} />
           <Route path="/login" element={<LoginPage />} />
         </Routes>
       </div>
