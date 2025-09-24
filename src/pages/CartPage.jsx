@@ -5,10 +5,11 @@ import { createPublicOrder, getMyOrders, cancelMyOrder } from "../api/orders";
 import { useNavigate } from "react-router-dom";
 import { FiTrash2, FiCreditCard, FiLock } from "react-icons/fi";
 
+
 export default function CartPage() {
   const { items, updateQty, removeFromCart, clearCart, subtotal } = useCart();
+  const { token } = useAuth();
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
 
   // shipping details
   const [customer, setCustomer] = useState({
@@ -133,53 +134,67 @@ export default function CartPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFF]">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
+      {/* 🔮 Ambient neon background */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -top-8 left-10 w-80 h-80 bg-fuchsia-600/25 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-0 right-10 w-96 h-96 bg-cyan-500/25 rounded-full blur-3xl animate-pulse [animation-delay:250ms]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:60px_60px]" />
+      </div>
+
       <Header />
 
       <main className="max-w-6xl mx-auto px-4 py-10">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-extrabold text-[#1E40AF]">Your Cart</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight text-fuchsia-300 drop-shadow-[0_0_14px_rgba(236,72,153,0.7)]">
+            Your Cart
+          </h1>
           {items.length > 0 && (
             <button
               onClick={clearCart}
-              className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-[#BFDBFE] text-[#1E40AF] hover:bg-[#EFF6FF] transition"
+              className="px-3 py-1.5 rounded-lg border border-rose-400/40 text-rose-300 hover:bg-rose-500/10 transition"
             >
-              <FiTrash2 /> Clear cart
+              Clear cart
             </button>
           )}
         </div>
 
         {!items.length ? (
-          <div className="rounded-xl border border-[#BFDBFE] bg-white p-8 text-center text-[#1E3A8A]">
+          <div className="rounded-2xl border border-fuchsia-500/30 bg-slate-900/70 p-8 text-center text-slate-300 shadow-[0_0_26px_rgba(217,70,239,0.14)]">
             Your cart is empty.
           </div>
         ) : (
           <div className="grid lg:grid-cols-3 gap-6">
-            {/* Items */}
+            {/* Items list */}
             <div className="lg:col-span-2 space-y-4">
               {items.map((it) => (
                 <div
                   key={it.productId}
+
                   className="flex items-center gap-4 rounded-xl border border-[#BFDBFE] bg-white p-4"
+
                 >
                   <div className="relative">
                     <img
                       src={it.image}
                       alt={it.name}
-                      className="w-24 h-24 object-cover rounded-lg border border-[#BFDBFE]"
-                      onError={(e) => (e.currentTarget.style.opacity = 0)}
+                      className="w-24 h-24 object-cover rounded-xl border border-slate-700/60"
                     />
+                    <span className="absolute -top-2 -right-2 px-2 py-0.5 rounded-full text-xs bg-cyan-500 text-slate-900 shadow-[0_0_10px_rgba(6,182,212,0.5)]">
+                      ${it.price.toFixed(2)}
+                    </span>
                   </div>
 
                   <div className="flex-1">
-                    <div className="font-semibold text-[#1E40AF]">{it.name}</div>
+                    <div className="font-semibold text-slate-100">{it.name}</div>
                     {typeof it.stock === "number" && (
+
                       <div className="text-xs text-[#1E3A8A] mt-0.5">
                         In stock: {it.stock}
                       </div>
                     )}
                     <div className="mt-2 flex items-center gap-2">
-                      <label className="text-sm text-[#1E3A8A]">Qty</label>
+                      <label className="text-sm text-slate-300">Qty</label>
                       <input
                         type="number"
                         min={1}
@@ -191,24 +206,25 @@ export default function CartPage() {
                             Math.max(1, Number(e.target.value || 1))
                           )
                         }
-                        className="w-24 rounded-lg bg-white border border-[#BFDBFE] px-3 py-2 text-[#1E3A8A] focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40"
+                        className="w-24 rounded-lg bg-slate-800/80 border border-cyan-400/40 px-3 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-400/60"
                       />
                     </div>
                   </div>
 
-                  <div className="w-28 text-right font-bold text-[#1E40AF]">
+                  <div className="w-28 text-right font-bold text-emerald-300">
                     ${(it.price * it.quantity).toFixed(2)}
                   </div>
 
                   <button
                     onClick={() => removeFromCart(it.productId)}
-                    className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-[#BFDBFE] text-[#1E40AF] hover:bg-[#EFF6FF] transition"
+                    className="px-3 py-2 rounded-lg border border-rose-400/40 text-rose-300 hover:bg-rose-500/10 transition"
                   >
-                    <FiTrash2 /> Remove
+                    Remove
                   </button>
                 </div>
               ))}
             </div>
+
 
             {/* Summary + Checkout */}
             <div className="lg:sticky lg:top-24 h-fit rounded-xl border border-[#BFDBFE] bg-white p-5">
@@ -216,26 +232,31 @@ export default function CartPage() {
                 Order Summary
               </h2>
 
-              <div className="space-y-2 text-[#1E3A8A]">
+              <div className="space-y-2 text-slate-200">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
+
                   <span className="font-semibold text-[#1E40AF]">
                     ${subtotal.toFixed(2)}
                   </span>
+
                 </div>
-                <div className="flex justify-between text-sm opacity-70">
+                <div className="flex justify-between text-sm text-slate-400">
                   <span>Shipping</span>
                   <span>Calculated at checkout</span>
                 </div>
               </div>
 
+
               {/* Shipping */}
               <h3 className="mt-6 text-sm font-semibold text-[#1E40AF] mb-2">
                 Shipping details
               </h3>
+
+
               <div className="grid grid-cols-1 gap-3">
                 <input
-                  className="rounded-lg bg-white border border-[#BFDBFE] px-3 py-2 text-[#1E3A8A] focus:outline-none"
+                  className="rounded-lg bg-slate-800/80 border border-cyan-400/40 px-3 py-2 text-slate-100 focus:outline-none"
                   placeholder="Full name"
                   value={customer.customerName}
                   onChange={(e) =>
@@ -243,7 +264,7 @@ export default function CartPage() {
                   }
                 />
                 <input
-                  className="rounded-lg bg-white border border-[#BFDBFE] px-3 py-2 text-[#1E3A8A] focus:outline-none"
+                  className="rounded-lg bg-slate-800/80 border border-cyan-400/40 px-3 py-2 text-slate-100 focus:outline-none"
                   placeholder="Phone number"
                   value={customer.phoneNumber}
                   onChange={(e) =>
@@ -251,7 +272,7 @@ export default function CartPage() {
                   }
                 />
                 <textarea
-                  className="rounded-lg bg-white border border-[#BFDBFE] px-3 py-2 w-full text-[#1E3A8A] focus:outline-none"
+                  className="rounded-lg bg-slate-800/80 border border-cyan-400/40 px-3 py-2 w-full text-slate-100 focus:outline-none"
                   rows={3}
                   placeholder="Address"
                   value={customer.address}
@@ -325,8 +346,10 @@ export default function CartPage() {
 
               <button
                 onClick={placeOrder}
+
                 disabled={!canSubmit}
                 className="mt-5 w-full px-4 py-3 rounded-lg bg-[#3B82F6] text-white font-semibold hover:bg-[#2563EB] transition disabled:opacity-50"
+
               >
                 {loading ? "Processing..." : "Pay & Confirm Order"}
               </button>
@@ -336,6 +359,7 @@ export default function CartPage() {
                   Please sign in to place an order.
                 </p>
               )}
+
             </div>
           </div>
         )}
