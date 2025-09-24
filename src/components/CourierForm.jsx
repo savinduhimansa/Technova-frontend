@@ -141,12 +141,10 @@ export default function CourierForm() {
         </div>
       </section>
 
-
       {/* MANAGE COURIERS *
       <section className="rounded-2xl border border-cyan-400/30 bg-slate-900/70 p-5 shadow-[0_0_30px_rgba(34,211,238,0.18)] backdrop-blur">
         <h3 className="text-lg md:text-xl font-semibold text-cyan-300 mb-3">🧭 Manage Couriers</h3>
         <div className="overflow-x-auto rounded-xl border border-fuchsia-400/20">
-
           <table className="w-full text-sm">
             <thead className="bg-slate-800/70 text-fuchsia-300">
               <tr>

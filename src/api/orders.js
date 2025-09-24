@@ -8,5 +8,3 @@ export const getConfirmedOrders = () => api.get("/orders/confirmed");
 
 // Public multi-item checkout
 export const createPublicOrder = (data) => api.post("/public/orders", data);
-export const getMyOrders = () => api.get("/public/orders/mine");
-export const cancelMyOrder = (id) => api.patch(`/public/orders/${id}/cancel`);
