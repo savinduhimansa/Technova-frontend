@@ -9,6 +9,7 @@ import LoginPage from "./pages/LoginPage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
 import CartPage from "./pages/CartPage.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
+
 import ForgetPassword from "./pages/forgetPassword.jsx";
 import ResetPassword from "./pages/resetPassword.jsx";
 import FeedbackPage from "./pages/FeedbackPage.jsx";
