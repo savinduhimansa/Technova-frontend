@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { askChatbot } from "../api/chatbot";
+import { FiMessageSquare, FiSend, FiX } from "react-icons/fi";
 
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
@@ -10,8 +11,8 @@ export default function ChatWidget() {
       id: "greet",
       role: "bot",
       text:
-        "Hi! I’m TechNova Assistant 🤖\n• Ask me to find a product (e.g., “find gaming laptop”).\n• Check order status (e.g., “order OD-002”).\n• Track delivery (e.g., “delivery OD-002”)."
-    }
+        "Hi! I’m TechNova Assistant.\n• Try: “find gaming laptop”\n• “order OD-002”\n• “delivery OD-002”",
+    },
   ]);
 
   const listRef = useRef(null);
@@ -29,10 +30,10 @@ export default function ChatWidget() {
       const res = await askChatbot(query);
       const answer = res.data?.answer || "Sorry, I don’t have an answer.";
       setMessages((m) => [...m, { id: crypto.randomUUID(), role: "bot", text: answer }]);
-    } catch (e) {
+    } catch {
       setMessages((m) => [
         ...m,
-        { id: crypto.randomUUID(), role: "bot", text: "⚠️ Oops, something went wrong. Try again." }
+        { id: crypto.randomUUID(), role: "bot", text: "Oops, something went wrong. Try again." },
       ]);
     } finally {
       setBusy(false);
@@ -42,7 +43,7 @@ export default function ChatWidget() {
   const Quick = ({ label, q }) => (
     <button
       onClick={() => send(q)}
-      className="text-xs px-2 py-1 rounded-lg border border-fuchsia-500/40 text-fuchsia-300 hover:bg-fuchsia-600/20 transition shadow-[0_0_8px_rgba(217,70,239,0.5)]"
+      className="text-xs px-2 py-1 rounded-lg border border-[#BFDBFE] text-[#1E40AF] hover:bg-[#EFF6FF] transition"
     >
       {label}
     </button>
@@ -50,64 +51,49 @@ export default function ChatWidget() {
 
   return (
     <>
-      {/* Floating Button */}
       <button
         onClick={() => setOpen((v) => !v)}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-fuchsia-600 to-cyan-500 shadow-[0_0_20px_rgba(6,182,212,0.7)] text-white text-xl grid place-items-center hover:scale-110 transition"
+        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-[#3B82F6] text-white grid place-items-center hover:bg-[#2563EB] transition"
         aria-label="Open chat"
         title="Chat with TechNova"
       >
-        💬
+        <FiMessageSquare size={22} />
       </button>
 
-      {/* Panel */}
       {open && (
-        <div className="fixed bottom-24 right-6 z-50 w-[360px] max-w-[92vw] rounded-2xl overflow-hidden shadow-[0_0_25px_rgba(168,85,247,0.7)] border border-fuchsia-500/40 bg-slate-950/95 text-slate-100 backdrop-blur-xl">
+        <div className="fixed bottom-24 right-6 z-50 w-[360px] max-w-[92vw] rounded-xl overflow-hidden bg-white border border-[#BFDBFE] shadow-sm">
           {/* Header */}
-          <div className="h-12 px-4 flex items-center justify-between bg-gradient-to-r from-fuchsia-700/50 to-cyan-700/50 border-b border-fuchsia-400/40">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex w-6 h-6 rounded-full bg-gradient-to-br from-cyan-400 to-fuchsia-500 items-center justify-center shadow-[0_0_8px_rgba(236,72,153,0.7)]">🤖</span>
-              <div className="text-sm font-semibold text-cyan-200">Lena — TechNova Assistant</div>
-            </div>
+          <div className="h-12 px-4 flex items-center justify-between border-b border-[#BFDBFE] bg-[#DBEAFE]">
+            <div className="text-sm font-semibold text-[#1E40AF]">🤖 TechNova Assistant</div>
             <button
               onClick={() => setOpen(false)}
-              className="text-fuchsia-300 hover:text-white text-xl leading-none"
+              className="text-[#1E40AF] hover:opacity-80"
               aria-label="Close"
             >
-              ×
+              <FiX size={18} />
             </button>
           </div>
 
           {/* Messages */}
-          <div ref={listRef} className="h-80 overflow-y-auto p-3 space-y-3 bg-gradient-to-b from-slate-950 to-slate-900">
+          <div ref={listRef} className="h-80 overflow-y-auto p-3 space-y-3 bg-white">
             {messages.map((m) => (
-              <div
-                key={m.id}
-                className={m.role === "user" ? "flex justify-end" : "flex justify-start"}
-              >
+              <div key={m.id} className={m.role === "user" ? "flex justify-end" : "flex"}>
                 <div
                   className={
                     m.role === "user"
-                      ? "max-w-[80%] rounded-2xl px-3 py-2 bg-cyan-600/90 text-white shadow-[0_0_12px_rgba(6,182,212,0.6)]"
-                      : "max-w-[80%] rounded-2xl px-3 py-2 bg-fuchsia-600/20 border border-fuchsia-500/40 text-fuchsia-100 whitespace-pre-wrap shadow-[0_0_8px_rgba(217,70,239,0.5)]"
+                      ? "max-w-[80%] rounded-xl px-3 py-2 bg-[#3B82F6] text-white"
+                      : "max-w-[80%] rounded-xl px-3 py-2 bg-[#EFF6FF] text-[#1E3A8A] whitespace-pre-wrap"
                   }
                 >
                   {m.text}
                 </div>
               </div>
             ))}
-            {busy && (
-              <div className="flex gap-2 items-center text-fuchsia-400 text-sm">
-                <span className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" />
-                <span className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce [animation-delay:120ms]" />
-                <span className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce [animation-delay:240ms]" />
-                <span className="ml-1">Thinking…</span>
-              </div>
-            )}
+            {busy && <div className="text-xs text-[#1E40AF]">Thinking…</div>}
           </div>
 
           {/* Quick actions */}
-          <div className="px-3 py-2 flex flex-wrap gap-2 bg-slate-950/90 border-t border-cyan-400/40">
+          <div className="px-3 py-2 flex flex-wrap gap-2 border-t border-[#BFDBFE] bg-white">
             <Quick label="Find a laptop" q="find gaming laptop" />
             <Quick label="Order status" q="order OD-001" />
             <Quick label="Delivery status" q="delivery OD-001" />
@@ -119,20 +105,20 @@ export default function ChatWidget() {
               e.preventDefault();
               send();
             }}
-            className="p-3 flex items-center gap-2 bg-slate-950"
+            className="p-3 flex items-center gap-2 bg-white border-t border-[#BFDBFE]"
           >
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type a message…"
-              className="flex-1 bg-slate-900/70 border border-cyan-500/40 rounded-xl px-3 py-2 text-slate-100 outline-none focus:ring-2 focus:ring-fuchsia-500/60"
+              className="flex-1 bg-white border border-[#BFDBFE] rounded-lg px-3 py-2 text-[#1E3A8A] outline-none focus:ring-2 focus:ring-[#3B82F6]/40"
             />
             <button
               type="submit"
               disabled={busy || !input.trim()}
-              className="px-3 py-2 rounded-xl bg-gradient-to-br from-fuchsia-600 to-cyan-500 text-white hover:opacity-90 disabled:opacity-40 shadow-[0_0_10px_rgba(236,72,153,0.7)]"
+              className="px-3 py-2 rounded-lg bg-[#3B82F6] text-white hover:bg-[#2563EB] disabled:opacity-40 transition inline-flex items-center gap-2"
             >
-              Send
+              <FiSend /> Send
             </button>
           </form>
         </div>

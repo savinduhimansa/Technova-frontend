@@ -279,7 +279,7 @@ const AdminFeedbackPage = () => {
                 </td>
                 <td className="px-4 py-2">
                   <div className="flex gap-2">
-                    <button
+                    {/* <button
                       onClick={() => startEdit(f)}
                       className="inline-flex items-center gap-1 rounded-md bg-[#10B981] hover:bg-[#059669] text-white px-3 py-1"
                       aria-label="Edit feedback"
@@ -287,7 +287,7 @@ const AdminFeedbackPage = () => {
                     >
                       <Pencil className="w-4 h-4" />
                       <span className="hidden sm:inline">Edit</span>
-                    </button>
+                    </button> */}
                     <button
                       onClick={() => handleDelete(f._id)}
                       className="inline-flex items-center gap-1 rounded-md bg-[#EF4444] hover:bg-[#DC2626] text-white px-3 py-1"

@@ -5,7 +5,9 @@ import Footer from "../components/Footer";
 export default function AboutUs() {
   return (
     <div className="min-h-screen bg-white text-[#1E3A8A]">
-      <Header />
+      <header>
+        <Header />
+      </header>
 
       <main className="p-8">
         <div className="max-w-5xl mx-auto">
@@ -114,7 +116,9 @@ export default function AboutUs() {
         </div>
       </main>
 
-      <Footer />
+      <footer>
+        <Footer />
+      </footer>
     </div>
   );
 }

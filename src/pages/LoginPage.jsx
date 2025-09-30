@@ -66,7 +66,7 @@ const LoginPage = () => {
               navigate("/productManager", { state: { email: staffMember.email } });
             }
             if (staffMember.role === 'technician') {
-              navigate("/technician", { state: { email: staffMember.email } });
+              navigate("/dash", { state: { email: staffMember.email } });
             }
             if (staffMember.role === 'salesManager') {
               navigate("/salesdashboard", { state: { email: staffMember.email } });

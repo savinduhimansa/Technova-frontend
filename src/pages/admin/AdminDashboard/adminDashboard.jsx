@@ -5,6 +5,10 @@ import AdminStaffPage from './AdminStaffPage';
 import AdminUserPage from './AdminUserPage';
 import AdminFeedbackPage from './AdminFeedbackPage';
 import LoginPage from '../../LoginPage';
+ import toast from 'react-hot-toast';
+ import AdminRequestedPC from './AdminRequestedPC';
+ import AdminOrder from "./AdminOrder";
+ import AdminDelivery from "./AdminDelivery";
 
 import { FaHome, FaUsers, FaUserTie, FaBox, FaSitemap, FaStar, FaServer, FaBicycle, FaFile, FaSearch } from 'react-icons/fa';
 import { FaSuitcase } from 'react-icons/fa6';
@@ -18,6 +22,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem('token');
+    toast.success('Logout successful');
     navigate('/login', { replace: true });
   };
 
@@ -55,6 +60,15 @@ const Sidebar = () => {
               >
                 <FaSuitcase className="nav-icon" />
                 Staff Members
+              </NavLink>
+            </li>
+             <li className="nav-item">
+              <NavLink
+                to="/admindashboard/requested-pc"
+                className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-[#1E40AF] hover:text-white transition"
+              >
+                <FaBox className="nav-icon" />
+                Requested PC
               </NavLink>
             </li>
             <li className="nav-item">
@@ -104,11 +118,11 @@ const Sidebar = () => {
             </li>
             <li className="nav-item">
               <NavLink
-                to="/admindashboard/payments"
+                to="/admindashboard/delivery"
                 className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-[#1E40AF] hover:text-white transition"
               >
                 <FaFile className="nav-icon" />
-                Payments
+                Delivery
               </NavLink>
             </li>
           </ul>
@@ -328,9 +342,10 @@ const AdminDashboard = () => {
           <Route path="/inventory" element={<h1 className="text-[#1E40AF] p-6">Inventory Page</h1>} />
           <Route path="/feedback" element={<AdminFeedbackPage />} />
           <Route path="/services" element={<h1 className="text-[#1E40AF] p-6">Services Page</h1>} />
-          <Route path="/orders" element={<h1 className="text-[#1E40AF] p-6">Orders Page</h1>} />
-          <Route path="/payments" element={<h1 className="text-[#1E40AF] p-6">Payments Page</h1>} />
+         <Route path="/orders" element={<AdminOrder />} />
+         <Route path="/delivery" element={<AdminDelivery />} />
           <Route path="/login" element={<LoginPage />} />
+           <Route path="requested-pc" element={<AdminRequestedPC />} /> 
         </Routes>
       </div>
     </div>

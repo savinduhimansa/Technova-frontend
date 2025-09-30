@@ -1,4 +1,5 @@
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 import { useCart } from "../context/CartContext";
 import { useEffect, useMemo, useState } from "react";
 import { createPublicOrder, getMyOrders, cancelMyOrder } from "../api/orders";
@@ -133,10 +134,10 @@ export default function CartPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFF]">
+    <div className="min-h-screen flex flex-col bg-[#F8FAFF]">
       <Header />
 
-      <main className="max-w-6xl mx-auto px-4 py-10">
+      <main className="flex-1 max-w-6xl mx-auto px-4 py-10">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-extrabold text-[#1E40AF]">Your Cart</h1>
           {items.length > 0 && (
@@ -410,6 +411,8 @@ export default function CartPage() {
           </section>
         )}
       </main>
+
+      <Footer />
     </div>
   );
 }

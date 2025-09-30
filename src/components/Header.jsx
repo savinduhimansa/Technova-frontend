@@ -1,78 +1,81 @@
-// src/components/Header.jsx
 import { Link, useNavigate } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 import { FiShoppingCart, FiLogOut, FiLogIn, FiUserPlus, FiLayout } from "react-icons/fi";
+import toast from "react-hot-toast";
 
-/* Read role from JWT in localStorage (no context needed) */
-function getRoleFromToken() {
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+function getRole() {
+  const token = localStorage.getItem("token");
   if (!token) return null;
   try {
     const payload = JSON.parse(
       atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))
     );
-    // normalize: admin / inventoryManager / productManager / technician / salesManager
-    const r = String(payload?.role || "").toLowerCase().replace(/[\s_-]/g, "");
-    return r || null;
+    return payload?.role || null;
   } catch {
     return null;
   }
 }
 
-/* Map role -> dashboard path + label */
-function roleToDashboard(roleNorm) {
-  switch (roleNorm) {
-    case "admin":
-      return { to: "/admindashboard", label: "Admin Dashboard" };
-    case "inventorymanager":
-      return { to: "/inv/dashboard", label: "Inventory Dashboard" };
-    case "productmanager":
-      return { to: "/productManager", label: "Product Manager" };
-    case "technician":
-      return { to: "/technician", label: "Technician" };
-    case "salesmanager":
-      return { to: "/salesdashboard", label: "Sales Dashboard" };
-    default:
-      return null;
-  }
-}
-
 export default function Header() {
+  const { items } = useCart();
   const navigate = useNavigate();
+  const role = getRole();
+  const authed = !!role;
+  const count = items.reduce((s, it) => s + it.quantity, 0);
 
-  const roleNorm = getRoleFromToken();      // e.g., "admin", "inventorymanager", etc.
-  const authed = !!roleNorm;
-  const dash = roleToDashboard(roleNorm);
-
-  const handleLogout = () => {
-    try {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      localStorage.removeItem("authType");
-    } catch {}
+  const logout = () => {
+    localStorage.removeItem("token");
+    toast.success("Logout successful");
     navigate("/");
   };
 
-  return (
-    <header className="w-full sticky top-0 z-50 border-b border-[#BFDBFE] bg-white">
-      <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-        {/* Brand */}
-        <Link
-          to="/"
-          className="font-bold text-lg text-[#1E40AF]"
-        >
-          TechNova
-        </Link>
+  const dash =
+    role === "salesManager"
+      ? { to: "/salesdashboard", label: "Sales Dashboard" }
+      : role === "admin"
+      ? { to: "/admindashboard", label: "Admin Dashboard" }
+      : null;
 
-        {/* Right side actions */}
+  return (
+    <header className="sticky top-0 z-50 bg-white border-b border-[#BFDBFE]">
+      <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+        {/* --- Logo + TechNova text --- */}
+<Link to="/" className="flex items-center gap-2">
+  <img
+    src="/Icon.svg"
+    alt="Logo"
+    className="h-10 w-auto object-contain"
+  />
+  <span className="font-bold text-lg text-[#1E40AF]">TechNova</span>
+</Link>
+
+
+
         <nav className="flex items-center gap-3">
-          {/* Cart link (no context required) */}
+          <Link
+            to="/buildpc"
+            className="inline-flex items-center gap-2 rounded-lg px-3 py-2 border border-[#BFDBFE] text-[#1E40AF] hover:bg-[#EFF6FF] transition"
+          >
+            Build My PC
+          </Link>
+
+          <Link
+            to="/mypc"
+            className="inline-flex items-center gap-2 rounded-lg px-3 py-2 border border-[#BFDBFE] text-[#1E40AF] hover:bg-[#EFF6FF] transition"
+          >
+            My PC Request
+          </Link>
+
           <Link
             to="/cart"
-            className="inline-flex items-center gap-2 rounded-lg px-3 py-2 border border-[#BFDBFE] text-[#1E40AF] hover:bg-[#EFF6FF] transition"
-            title="Cart"
+            className="relative inline-flex items-center gap-2 rounded-lg px-3 py-2 border border-[#BFDBFE] text-[#1E40AF] hover:bg-[#EFF6FF] transition"
           >
             <FiShoppingCart />
-            <span className="hidden sm:inline">Cart</span>
+            {count > 0 && (
+              <span className="absolute -top-2 -right-2 text-xs bg-[#3B82F6] text-white rounded-full px-1.5 py-0.5">
+                {count}
+              </span>
+            )}
           </Link>
 
           {!authed ? (
@@ -81,15 +84,13 @@ export default function Header() {
                 to="/login"
                 className="inline-flex items-center gap-2 rounded-lg px-3 py-2 border border-[#BFDBFE] text-[#1E40AF] hover:bg-[#EFF6FF] transition"
               >
-                <FiLogIn />
-                Sign in
+                <FiLogIn /> Sign in
               </Link>
               <Link
                 to="/signup"
                 className="inline-flex items-center gap-2 rounded-lg px-3 py-2 bg-[#3B82F6] text-white hover:bg-[#2563EB] transition"
               >
-                <FiUserPlus />
-                Sign up
+                <FiUserPlus /> Sign up
               </Link>
             </>
           ) : (
@@ -99,17 +100,14 @@ export default function Header() {
                   to={dash.to}
                   className="inline-flex items-center gap-2 rounded-lg px-3 py-2 border border-[#BFDBFE] text-[#1E40AF] hover:bg-[#EFF6FF] transition"
                 >
-                  <FiLayout />
-                  {dash.label}
+                  <FiLayout /> {dash.label}
                 </Link>
               )}
-
               <button
-                onClick={handleLogout}
+                onClick={logout}
                 className="inline-flex items-center gap-2 rounded-lg px-3 py-2 border border-[#BFDBFE] text-[#1E40AF] hover:bg-[#EFF6FF] transition"
               >
-                <FiLogOut />
-                Logout
+                <FiLogOut /> Logout
               </button>
             </>
           )}

@@ -1,50 +1,42 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { FiBarChart2, FiPackage, FiTruck, FiCompass, FiLogOut } from "react-icons/fi";
 
 const linkClasses = ({ isActive }) =>
-  `block px-3 py-2 rounded-lg border ${
-    isActive
-      ? "border-cyan-400/60 bg-cyan-500/10 text-cyan-300"
-      : "border-slate-700/60 text-slate-300 hover:bg-slate-800/60"
-  } transition`;
+  `flex items-center gap-2 px-3 py-2 rounded-lg transition
+   ${isActive ? "bg-[#1E40AF] text-white" : "text-white/90 hover:bg-[#1E40AF]"}`;
 
 export default function SalesSidebar() {
-  const { logout, user } = useAuth();
   const navigate = useNavigate();
+  const logout = () => {
+    localStorage.removeItem("token");
+    navigate("/login", { replace: true });
+  };
 
   return (
-    <aside className="h-screen w-64 border-r border-fuchsia-500/30 bg-slate-950/80 fixed left-0 top-0 backdrop-blur">
-      <div className="h-14 border-b border-fuchsia-500/20 flex items-center px-4 font-semibold text-fuchsia-300">
-        TechNova CRM
-      </div>
+    <aside className="h-screen w-64 fixed left-0 top-0 bg-[#1E3A8A] text-white">
+      <div className="h-14 flex items-center px-4 font-semibold">TechNova CRM</div>
 
-      <div className="p-3 space-y-1">
+      <nav className="p-3 space-y-1">
         <NavLink to="/salesdashboard" end className={linkClasses}>
-          📊 Sales Dashboard
+          <FiBarChart2 /> <span>Dashboard</span>
         </NavLink>
         <NavLink to="/salesdashboard/orders" className={linkClasses}>
-          📦 Orders
+          <FiPackage /> <span>Orders</span>
         </NavLink>
         <NavLink to="/salesdashboard/deliveries" className={linkClasses}>
-          🚚 Deliveries
+          <FiTruck /> <span>Deliveries</span>
         </NavLink>
         <NavLink to="/salesdashboard/couriers" className={linkClasses}>
-          🧭 Couriers
+          <FiCompass /> <span>Couriers</span>
         </NavLink>
-      </div>
+      </nav>
 
-      <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-fuchsia-500/20">
-        <div className="text-xs text-slate-400 mb-2">
-          Signed in as <b className="text-slate-200">{user?.email}</b>
-        </div>
+      <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-white/10">
         <button
-          onClick={() => {
-            logout();
-            navigate("/login", { replace: true });
-          }}
-          className="w-full px-3 py-2 rounded-lg border border-rose-400/40 text-rose-300 hover:bg-rose-500/10 text-left transition"
+          onClick={logout}
+          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-white/90 hover:bg-[#1E40AF]"
         >
-          Logout
+          <FiLogOut /> Logout
         </button>
       </div>
     </aside>

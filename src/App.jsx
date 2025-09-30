@@ -3,6 +3,9 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import ProtectedRoute from "./components/ProtectedRoute";
 
+import { DashboardHome } from "./pages/Dash.jsx";
+
+
 // Public Pages
 import HomePage from "./pages/HomePage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
@@ -15,6 +18,15 @@ import ResetPassword from "./pages/resetPassword.jsx";
 import FeedbackPage from "./pages/FeedbackPage.jsx";
 import StaffProfile from "./pages/StaffProfile.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
+
+import Dash from "./pages/Dash.jsx";
+import RepairDetails from "./pages/RepairDetails.jsx";
+import RepairList  from "./pages/RepairList.jsx";
+import ServiceList   from "./pages/ServiceList.jsx";
+import TicketForm from "./pages/TicketForm.jsx";
+import TicketList from "./pages/TicketList.jsx";
+import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
+import AboutUs from "./pages/AboutUs.jsx";
 
 // Sales Dashboard Layout + Pages
 import SalesDashboardLayout from "./layouts/SalesDashboardLayout.jsx";
@@ -35,7 +47,9 @@ import InventoryAdd from "./pages/inventoryAdd.jsx";
 import InventoryEdit from "./pages/InventoryEdit.jsx";
 import AddSupplier from "./pages/AddSupplier.jsx";
 import SupplierEdit from "./pages/SupplierEdit.jsx";
-import Suppliers from "./pages/suppliers.jsx";   
+import Suppliers from "./pages/suppliers.jsx"; 
+import BuildMyPC from "./pages/BuildMyPC.jsx";
+import MyPCRequest from "./pages/MyPCRequest.jsx";  
 
 export default function App() {
   return (
@@ -53,6 +67,13 @@ export default function App() {
         <Route path="/feedback" element={<FeedbackPage />} />
         <Route path="/profile" element={<UserProfile />} />       {/* user self-profile */}
         <Route path="/staff/profile" element={<StaffProfile />} />{/* staff self-profile */}
+         <Route path="/buildpc" element={<BuildMyPC />} />
+
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/aboutus" element={<AboutUs />} />
+              <Route path="TicketForm"   element={<TicketForm />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/about" element={<AboutUs />} />
 
         {/* ---------- Sales dashboard (only salesManager) ---------- */}
         <Route
@@ -78,6 +99,23 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
+
+ {/* Protected Technician Dashboard  */}
+        <Route path="/dash" element=  {<Dash/>}>
+          <Route index element={<Navigate to="dash" replace />} />
+          <Route path="dash"    element={<DashboardHome />} />
+          <Route path="RepairList"   element={<RepairList />} />
+          <Route path="RepairList/:id" element={<RepairDetails />} />
+          <Route path="add-repair"     element={<RepairDetails />} />
+          <Route path="edit-repair/:id" element={<RepairDetails />} />
+          <Route path="ServiceList" element={<ServiceList />} />
+          <Route path="TicketList" element={<TicketList/>} />
+          <Route path="TicketForm/:id/edit" element={<TicketForm />} />
+        </Route>
+
+
+
 
          {/* ---------- INVENTORY APP: protected mini-app under /inv/* ---------- */}
         <Route
@@ -105,6 +143,8 @@ export default function App() {
 
         {/* ---------- Catch-all ---------- */}
         <Route path="*" element={<Navigate to="/" replace />} />
+
+         <Route path="/mypc" element={<MyPCRequest />} />
       </Routes>
     </BrowserRouter>
   );
